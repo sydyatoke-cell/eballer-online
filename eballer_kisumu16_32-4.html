@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>EBALLER KISUMU 16</title>
+<style>
+:root{--gold:#d6aa2b;--gold2:#f0cf58;--bg:#070707;--panel:#11110f;--muted:#9d9a8d;--line:#3b331b;--white:#f4f1e8}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#17150e 0,#070707 45%);color:var(--white);font-family:Arial,Helvetica,sans-serif}
+.container{width:min(1050px,94%);margin:auto}.hero{padding:45px 0 25px;text-align:center;border-bottom:1px solid #28251b}
+.badge{display:inline-block;border:1px solid var(--gold);color:var(--gold2);padding:7px 12px;font-size:12px;letter-spacing:2px}
+h1{font-size:clamp(36px,8vw,70px);margin:14px 0 5px;letter-spacing:2px}.sub{color:var(--muted);margin:0}.gold{color:var(--gold2)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:25px 0}.card{background:rgba(17,17,15,.95);border:1px solid var(--line);padding:22px;border-radius:6px;box-shadow:0 10px 30px #0008}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{text-align:center;padding:16px;border:1px solid #302a19}.stat b{display:block;font-size:26px;color:var(--gold2)}
+h2{margin-top:0;font-size:19px;letter-spacing:1px}label{display:block;font-size:12px;color:var(--muted);margin:13px 0 6px}
+input,select{width:100%;padding:12px;background:#080807;border:1px solid #403719;color:white;border-radius:4px;outline:none}input:focus,select:focus{border-color:var(--gold)}
+button,.whatsapp{border:1px solid var(--gold);background:linear-gradient(#2a2412,#17150d);color:var(--gold2);padding:12px 16px;border-radius:4px;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block;margin-top:15px}button:hover,.whatsapp:hover{background:#312812}.danger{border-color:#6c302b;color:#ff9a8f}.hidden{display:none}.notice{padding:11px;border:1px solid #39321e;color:#c8c1a8;font-size:13px;margin-top:12px}
+.players{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.player{border:1px solid #302a19;padding:9px;font-size:13px}.verified{color:#8ee08e;font-size:11px}.pending{color:#e4b84d;font-size:11px}
+.bracket{overflow-x:auto}.rounds{display:grid;grid-template-columns:repeat(4,minmax(190px,1fr));gap:25px;min-width:820px}.round h3{text-align:center;color:var(--gold2);font-size:12px;letter-spacing:2px}.match{border:1px solid #3d341d;margin:18px 0;background:#0d0d0b}.slot{padding:12px;border-bottom:1px solid #2c2719;min-height:42px}.slot:last-child{border:0}.winner{color:var(--gold2);font-weight:bold}
+.admin-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.small{font-size:11px;color:var(--muted)}
+footer{border-top:1px solid #28251b;margin-top:40px;padding:25px 0;text-align:center;color:#777;font-size:11px;letter-spacing:1px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.players{grid-template-columns:1fr}.admin-actions{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="container">
+<div class="badge">32 PLAYER KNOCKOUT TOURNAMENT</div>
+<h1>EBALLER <span class="gold">KISUMU 16</span></h1>
+<p class="sub">PAY • VERIFY • PLAY • WIN</p>
+</div></header>
+
+<main class="container">
+<section class="card" style="margin-top:25px">
+<div class="stats">
+<div class="stat"><b id="count">0/32</b>PLAYERS</div>
+<div class="stat"><b>50 KES</b>ENTRY</div>
+<div class="stat"><b>1,000 KES</b>PRIZE</div>
+</div>
+<div class="notice">Send <strong>50 KES</strong> to <strong class="gold">LOOP</strong> account <strong>420200874887</strong>, then register using your LOOP transaction code.</div>
+</section>
+
+<section class="grid">
+<div class="card">
+<h2>PLAYER REGISTRATION</h2>
+<form id="regForm">
+<label>Gamer Name</label><input id="name" maxlength="30" required placeholder="e.g. EBALLER KING">
+<label>Phone Number</label><input id="phone" inputmode="tel" maxlength="15" required placeholder="07XXXXXXXX">
+<label>LOOP Transaction Code</label><input id="mpesa" maxlength="20" required placeholder="e.g. LOOP123XYZ">
+<button type="submit">REGISTER PLAYER</button>
+</form>
+<div id="regMsg" class="notice hidden"></div>
+</div>
+
+<div class="card">
+<h2>REGISTERED PLAYERS</h2>
+<div id="players" class="players"></div>
+</div>
+</section>
+
+<section class="card">
+<h2>KNOCKOUT BRACKET</h2>
+<div class="bracket"><div class="rounds">
+<div class="round"><h3>ROUND OF 16</h3><div id="r16"></div></div>
+<div class="round"><h3>QUARTER FINALS</h3><div id="qf"></div></div>
+<div class="round"><h3>SEMI FINALS</h3><div id="sf"></div></div>
+<div class="round"><h3>FINAL</h3><div id="final"></div></div>
+</div></div>
+</section>
+
+<section class="card">
+<h2>OWNER DESK</h2>
+<div id="loginBox">
+<label>Owner Password</label><input id="password" type="password" placeholder="Enter owner password">
+<button id="login">UNLOCK DESK</button>
+</div>
+<div id="desk" class="hidden">
+<p class="small">Verify each player's payment, then select winners to advance them through the bracket.</p>
+<div id="adminList"></div>
+<div class="admin-actions">
+<button id="reset" class="danger">RESET TOURNAMENT</button>
+<button id="logout">LOCK DESK</button>
+</div>
+</div>
+</section>
+
+<section class="card">
+<h2>CHAMPION</h2>
+<div id="champion">Champion will appear here after the final is set.</div>
+<a id="reward" class="whatsapp hidden" target="_blank" rel="noopener">CLAIM / REWARD CHAMPION ON WHATSAPP</a>
+</section>
+</main>
+<footer>EBALLER KISUMU 16 • PLAY FAIR. BALL HARD.</footer>
+
+<script>
+const KEY="eballer_kisumu16_32_v1";
+const OWNER_PASSWORD="sydyato77";
+const MAX=32;
+let state=JSON.parse(localStorage.getItem(KEY)||"null")||{players:[],matches:{}};
+
+function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function playerLabel(id){const p=state.players.find(x=>x.id===id);return p?p.name:"TBD"}
+
+function renderPlayers(){
+ document.getElementById("count").textContent=`${state.players.length}/${MAX}`;
+ const box=document.getElementById("players");
+ box.innerHTML=state.players.length?state.players.map(p=>`<div class="player"><strong>${esc(p.name)}</strong><br><span class="${p.verified?"verified":"pending"}">${p.verified?"PAYMENT VERIFIED":"PAYMENT PENDING"}</span></div>`).join(""):'<div class="small">No players registered yet.</div>';
+}
+function r16Slot(i){const p=state.players[i];return p?esc(p.name):"BYE / TBD"}
+function renderBracket(){
+ const r16=document.getElementById("r16"),qf=document.getElementById("qf"),sf=document.getElementById("sf"),fin=document.getElementById("final");
+ r16.innerHTML=Array.from({length:16},(_,i)=>`<div class="match"><div class="slot">${r16Slot(i*2)}</div><div class="slot">${r16Slot(i*2+1)}</div></div>`).join("");
+ qf.innerHTML=Array.from({length:8},(_,i)=>`<div class="match"><div class="slot">${state.matches["qf_"+(i*2)]?esc(playerLabel(state.matches["qf_"+(i*2)])):"TBD"}</div><div class="slot">${state.matches["qf_"+(i*2+1)]?esc(playerLabel(state.matches["qf_"+(i*2+1)])):"TBD"}</div></div>`).join("");
+ sf.innerHTML=Array.from({length:4},(_,i)=>`<div class="match"><div class="slot">${state.matches["sf_"+(i*2)]?esc(playerLabel(state.matches["sf_"+(i*2)])):"TBD"}</div><div class="slot">${state.matches["sf_"+(i*2+1)]?esc(playerLabel(state.matches["sf_"+(i*2+1)])):"TBD"}</div></div>`).join("");
+ fin.innerHTML=`<div class="match"><div class="slot">${state.matches.final_0?esc(playerLabel(state.matches.final_0)):"TBD"}</div><div class="slot">${state.matches.final_1?esc(playerLabel(state.matches.final_1)):"TBD"}</div></div>`;
+ const champ=state.matches.champion;
+ document.getElementById("champion").innerHTML=champ?`<strong class="gold" style="font-size:22px">${esc(playerLabel(champ))}</strong><br><span class="small">Prize: 1,000 KES</span>`:"Champion will appear here after the final is set.";
+ const reward=document.getElementById("reward");
+ if(champ){reward.classList.remove("hidden");reward.href="https://wa.me/254753998388?text="+encodeURIComponent("EBALLER KISUMU 16 champion reward: "+playerLabel(champ)+". Please arrange the 1,000 KES prize.");}else reward.classList.add("hidden");
+}
+function availableFor(round,i){
+ if(round==="r16")return [state.players[i*2]?.id,state.players[i*2+1]?.id];
+ if(round==="qf")return [state.matches["r16_"+(i*2)]||null,state.matches["r16_"+(i*2+1)]||null];
+ if(round==="sf")return [state.matches["qf_"+(i*2)]||null,state.matches["qf_"+(i*2+1)]||null];
+ return [state.matches.sf_0||null,state.matches.sf_1||null];
+}
+function matchControls(round,i,isFinal=false){
+ const opts=availableFor(round,i).filter(Boolean);
+ const key=isFinal?"final":round+"_"+(i*2);
+ const cur=state.matches[key]||"";
+ return `<div class="notice"><strong>${isFinal?"FINAL":round.toUpperCase()+" "+(i+1)}</strong><select data-key="${key}"><option value="">Select winner</option>${opts.map(id=>`<option value="${id}" ${id===cur?"selected":""}>${esc(playerLabel(id))}</option>`).join("")}</select></div>`;
+}
+function renderAdmin(){
+ const box=document.getElementById("adminList");
+ box.innerHTML=state.players.map((p,i)=>`<div class="player" style="margin:8px 0"><strong>${esc(p.name)}</strong> • ${esc(p.phone)} • ${esc(p.mpesa)}<br><span class="${p.verified?"verified":"pending"}">${p.verified?"VERIFIED":"PENDING"}</span><br><button onclick="verify(${i})">${p.verified?"UNVERIFY":"VERIFY PAYMENT"}</button></div>`).join("")||'<div class="small">No registrations.</div>';
+ if(state.players.length===MAX)box.innerHTML+=`<hr style="border-color:#28251b"><h3>SET WINNERS</h3>`+
+ Array.from({length:16},(_,i)=>matchControls("r16",i)).join("")+
+ Array.from({length:8},(_,i)=>matchControls("qf",i)).join("")+
+ Array.from({length:4},(_,i)=>matchControls("sf",i)).join("")+
+ matchControls("final",0,true)+
+ `<div class="notice"><strong>CHAMPION</strong><select data-key="champion"><option value="">Select champion</option>${(state.matches.final_0&&state.matches.final_1?[state.matches.final_0,state.matches.final_1]:[]).map(id=>`<option value="${id}" ${id===state.matches.champion?"selected":""}>${esc(playerLabel(id))}</option>`).join("")}</select></div>`;
+ document.querySelectorAll("#adminList select").forEach(s=>s.onchange=()=>{if(s.value)state.matches[s.dataset.key]=s.value;else delete state.matches[s.dataset.key];save();if(!document.getElementById("desk").classList.contains("hidden"))renderAdmin()});
+}
+function verify(i){state.players[i].verified=!state.players[i].verified;save();if(!document.getElementById("desk").classList.contains("hidden"))renderAdmin()}
+document.getElementById("regForm").onsubmit=e=>{
+ e.preventDefault();
+ if(state.players.length>=MAX)return showMsg("Tournament is full.");
+ const name=document.getElementById("name").value.trim(),phone=document.getElementById("phone").value.trim(),mpesa=document.getElementById("mpesa").value.trim().toUpperCase();
+ if(state.players.some(p=>p.phone===phone||p.mpesa===mpesa))return showMsg("Phone or LOOP transaction code is already registered.");
+ state.players.push({id:crypto.randomUUID(),name,phone,mpesa,verified:false});
+ save();e.target.reset();showMsg("Registration received. Payment is pending owner verification.");
+};
+function showMsg(t){const x=document.getElementById("regMsg");x.textContent=t;x.classList.remove("hidden");setTimeout(()=>x.classList.add("hidden"),4000)}
+document.getElementById("login").onclick=()=>{
+ if(document.getElementById("password").value===OWNER_PASSWORD){document.getElementById("loginBox").classList.add("hidden");document.getElementById("desk").classList.remove("hidden");renderAdmin()}
+ else alert("Incorrect owner password.");
+};
+document.getElementById("logout").onclick=()=>{document.getElementById("desk").classList.add("hidden");document.getElementById("loginBox").classList.remove("hidden");document.getElementById("password").value=""};
+document.getElementById("reset").onclick=()=>{if(confirm("Delete all registrations and bracket results?")){state={players:[],matches:{}};save();renderAdmin()}};
+function render(){renderPlayers();renderBracket()}
+render();
+</script>
+</body>
+</html>
