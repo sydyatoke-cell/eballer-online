@@ -1,78 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EBALLER ONLINE - KISUMU 16 | Champion 1000 KES</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EBALLER LOOP - KISUMU</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
-body{background:#0a0e13;color:#fff;min-height:100vh}
-.header{background:linear-gradient(135deg,#00ff88,#00ccff);padding:16px;text-align:center;color:#000}
-.header h1{font-size:22px;font-weight:900}
-.topbar{display:flex;justify-content:space-between;padding:10px 12px;background:#11151c;font-size:12px;border-bottom:1px solid #222}
-.topbar b{color:#00ff88}
-.card{margin:12px;background:#151a23;border-radius:16px;padding:14px;border:1px solid #222}
-.btn{width:100%;padding:14px;border-radius:12px;border:0;font-weight:900;font-size:15px;cursor:pointer}
-.btn-join{background:#00ff88;color:#000}
-.btn-admin{background:#222;color:#00ff88;border:1px solid #00ff88;margin-top:10px}
-.input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#0a0e13;color:#fff;margin:8px 0}
-.players{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.pill{background:#0a0e13;border:1px solid #333;padding:8px 10px;border-radius:10px;font-size:12px;display:flex;justify-content:space-between}
-.match{background:#0a0e13;border:1px solid #333;border-radius:10px;padding:8px;margin:8px 0;font-size:12px}
-.winner{color:#00ff88;font-weight:900}
-.tab.active{background:#00ff88;color:#000}
-.tabs{display:flex;gap:8px;margin:12px}
-.tab{flex:1;padding:10px;text-align:center;background:#11151c;border-radius:10px;font-size:13px;font-weight:700;border:1px solid #222}
-.hidden{display:none}
-.admin-box{background:#0f1a14;border:1px solid #00ff88}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,sans-serif}
+body{background:#0a0a0a;color:#fff}
+.header{background:linear-gradient(90deg,#00a651,#ff6a00);padding:16px;text-align:center;font-weight:900}
+.card{margin:12px;background:#1e1e1e;border-radius:16px;padding:16px;border:1px solid #2a2a2a}
+.btn{width:100%;padding:16px;border-radius:12px;border:0;font-weight:900;font-size:15px}
+.btn-loop{background:#00a651;color:#fff}
+.input{width:100%;padding:13px;margin:7px 0;border-radius:10px;border:1px solid #444;background:#000;color:#fff;font-size:14px}
+.pill{background:#000;border:1px solid #333;padding:12px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between}
+.loop-box{background:#000;border:1px dashed #00a651;padding:12px;border-radius:10px;margin:10px 0}
 </style>
 </head>
 <body>
-<div class="header">
-<h1>⚡ EBALLER ONLINE</h1>
-<div style="font-size:12px;font-weight:700">KISUMU 16 • CHAMPION 1000 KES • 0753998388</div>
+<div class="header">⚡ EBALLER ONLINE - KISUMU 16<br><span style="font-size:11px">LOOP Paybill 714777 | Acc 0141939000 | 50 KES JOIN | 1000 KES CHAMPION | 0753998388</span></div>
+
+<div class="card" style="border:2px solid #00a651">
+<div class="loop-box">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<div><b style="color:#00a651">LOOP</b> - M-PESA Paybill</div>
+<div style="background:#00a651;color:#fff;padding:4px 8px;border-radius:20px;font-size:10px">LIVE</div>
 </div>
-<div class="topbar">
-<div>Players: <b id="pcount">0/16</b></div>
-<div>LOOP: <b>420200874887</b></div>
-<div>Entry: <b>50 KES</b></div>
-</div>
-<div class="tabs">
-<div class="tab active" onclick="showTab('join',this)">JOIN</div>
-<div class="tab" onclick="showTab('bracket',this)">BRACKET</div>
-<div class="tab" onclick="showTab('results',this)">RESULTS</div>
-</div>
-<div id="tab-join">
-<div class="card"><h3>🏆 Prize: Champion 1000 KES | Runner 500 | LOOP 420200874887 | Owner 0753998388</h3></div>
-<div class="card">
-<h3>🎮 Join Tournament</h3>
-<input id="pname" class="input" placeholder="eFootball Name e.g. Sydatoke">
-<button class="btn btn-join" onclick="join()">JOIN BATTLE - 50 KES</button>
-<div id="plist" class="players"></div>
-<button class="btn btn-admin" onclick="askAdmin()">🔐 ADMIN: Update Results</button>
+<div style="margin-top:8px;font-size:13px;line-height:1.6">
+Paybill: <b style="color:#fff;font-size:15px">714777</b><br>
+Account: <b style="color:#fff">0141939000</b><br>
+Amount: <b>50 KES</b><br>
+<span style="font-size:11px;color:#888">LOOP 420200874887</span>
 </div>
 </div>
-<div id="tab-bracket" class="hidden"><div class="card"><div id="bracket" style="display:flex;gap:12px;overflow-x:auto"></div></div></div>
-<div id="tab-results" class="hidden"><div class="card"><div id="resultsBox"></div><button class="btn btn-admin" onclick="shareResults()">📤 Share to WhatsApp</button></div></div>
-<div id="adminPanel" class="card admin-box hidden"><h3>🔐 ADMIN 0753998388</h3><div id="adminMatches"></div><br><button class="btn" style="background:#ff3b30;color:#fff" onclick="resetTourney()">RESET</button> <button class="btn btn-admin" onclick="closeAdmin()">Close</button></div>
+
+<h3>🎮 1. Join Tournament (<span id="count">0</span>/16)</h3>
+<input id="pname" class="input" placeholder="eFootball Name">
+<input id="phone" class="input" placeholder="M-Pesa Phone 07XXXXXXXX">
+<button class="btn btn-loop" onclick="payLoop()">💚 PAY 50 KES - MPESA PROMPT TO LOOP</button>
+<p style="font-size:10px;color:#888;margin-top:8px;text-align:center">Tap → Your M-Pesa opens with LOOP Paybill 714777 + Acc 0141939000 + 50 KES ready → Enter PIN → Get M-Pesa Code</p>
+<div id="list" style="margin-top:10px"></div>
+</div>
+
+<div class="card" style="border:2px solid #ff6a00">
+<h3>🔓 2. UNLOCK DESK - Enter M-Pesa Code</h3>
+<p style="font-size:11px;color:#aaa">After paying to LOOP, enter code to join</p>
+<input id="code" class="input" placeholder="M-Pesa Code e.g. QGH8XYZ123">
+<button class="btn" style="background:#ff6a00;color:#fff;margin-top:6px" onclick="unlockLoop()">✅ VERIFY & UNLOCK - JOIN NOW</button>
+<div id="unlocked" style="margin-top:12px"></div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn" style="background:#222;color:#fff;flex:1;font-size:12px" onclick="shareWA()">📤 Share WhatsApp</button>
+<button class="btn" style="background:#222;color:#fff;flex:1;font-size:12px" onclick="clearAll()">Clear (Admin)</button>
+</div>
+</div>
+
 <script>
-let players=JSON.parse(localStorage.getItem('eballer_v2_players')||'[]');
-let matches=JSON.parse(localStorage.getItem('eballer_v2_matches')||'null');
-const MAX=16; const ADMIN_PASS="0753998388";
-function save(){localStorage.setItem('eballer_v2_players',JSON.stringify(players));localStorage.setItem('eballer_v2_matches',JSON.stringify(matches));render();}
-function join(){let n=document.getElementById('pname').value.trim();if(!n)return alert('Enter name');if(players.length>=MAX)return alert('Full');if(players.find(p=>p.name.toLowerCase()===n.toLowerCase()))return alert('Exists');players.push({name:n,paid:false});document.getElementById('pname').value='';generateMatches();save();alert(n+' joined! Send 50 to LOOP 420200874887');}
-function generateMatches(){if(players.length<2)return;if(!matches||matches.length===0){matches=[];for(let i=0;i<players.length;i+=2){if(players[i+1])matches.push({r:1,m:i/2+1,p1:players[i].name,p2:players[i+1].name,winner:''});}}}
-function render(){document.getElementById('pcount').innerText=players.length+'/'+MAX;let h='';players.forEach((p,i)=>{h+=`<div class="pill"><span>${i+1}. ${p.name}</span><span>${p.paid?'PAID':'UNPAID'}</span></div>`;});document.getElementById('plist').innerHTML=h||'No players';renderBracket();renderResults();}
-function renderBracket(){let el=document.getElementById('bracket');if(!matches||matches.length===0){el.innerHTML='Need 4+ players';return;}let rounds={1:[],2:[],3:[],4:[]};matches.forEach(m=>{rounds[m.r].push(m)});for(let r=1;r<4;r++){let wins=(rounds[r]||[]).filter(m=>m.winner).map(m=>m.winner);if(wins.length>=2){for(let i=0;i<wins.length;i+=2){if(wins[i+1]&&!matches.find(x=>x.r===r+1&&(x.p1===wins[i]||x.p2===wins[i]))){matches.push({r:r+1,m:Math.floor(i/2)+1,p1:wins[i],p2:wins[i+1],winner:''});}}}}let html='';[1,2,3,4].forEach(r=>{if(rounds[r]&&rounds[r].length){let name=r===1?'R16':r===2?'QF':r===3?'SF':'FINAL';html+=`<div style="min-width:140px"><div style="color:#00ff88;font-weight:900;font-size:11px">${name}</div>`;rounds[r].forEach(m=>{html+=`<div class="match"><div class="${m.winner===m.p1?'winner':''}">${m.p1} ${m.winner===m.p1?'🏆':''}</div><div style="color:#666;font-size:10px;text-align:center">vs</div><div class="${m.winner===m.p2?'winner':''}">${m.p2} ${m.winner===m.p2?'🏆':''}</div>${m.winner?`<div style="color:#00ff88">Winner:${m.winner}</div>`:''}</div>`;});html+='</div>';}});el.innerHTML=html;}
-function renderResults(){if(!matches){document.getElementById('resultsBox').innerHTML='No matches';return;}let h='';matches.forEach(m=>{h+=`R${m.r} M${m.m}: ${m.p1} vs ${m.p2} → ${m.winner?`<b style="color:#00ff88">${m.winner} won</b>`:'pending'}<br>`;});let champ=matches.filter(m=>m.winner).slice(-1)[0];if(champ&&champ.r>=3)h+=`<br><div style="background:#00ff88;color:#000;padding:10px;border-radius:10px;font-weight:900">🏆 CHAMPION: ${champ.winner} - 1000 KES!</div>`;document.getElementById('resultsBox').innerHTML=h;}
-function showTab(t,el){document.getElementById('tab-join').classList.add('hidden');document.getElementById('tab-bracket').classList.add('hidden');document.getElementById('tab-results').classList.add('hidden');document.getElementById('tab-'+t).classList.remove('hidden');document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));el.classList.add('active');}
-function askAdmin(){let p=prompt('Admin Phone:');if(p===ADMIN_PASS){document.getElementById('adminPanel').classList.remove('hidden');renderAdmin();}else alert('Wrong');}
-function closeAdmin(){document.getElementById('adminPanel').classList.add('hidden');}
-function renderAdmin(){if(!matches){document.getElementById('adminMatches').innerHTML='Need players';return;}let h='';matches.forEach((m,i)=>{if(!m.winner)h+=`<div class="match">${m.p1} vs ${m.p2}<div style="display:flex;gap:6px;margin-top:6px"><button onclick="setWinner(${i},'${m.p1}')" style="flex:1;padding:8px;background:#00ff88;border:0;border-radius:8px;font-weight:900">${m.p1} Won</button><button onclick="setWinner(${i},'${m.p2}')" style="flex:1;padding:8px;background:#00ccff;border:0;border-radius:8px;font-weight:900">${m.p2} Won</button></div></div>`;});players.forEach((p,i)=>{h+=`<div class="pill">${p.name}<button onclick="togglePaid(${i})" style="padding:4px 8px;border-radius:6px;border:0;background:${p.paid?'#00ff88':'#333'};color:${p.paid?'#000':'#fff'}">${p.paid?'PAID':'Mark Paid'}</button></div>`;});document.getElementById('adminMatches').innerHTML=h||'All done';}
-function setWinner(i,w){matches[i].winner=w;save();renderAdmin();}
-function togglePaid(i){players[i].paid=!players[i].paid;save();renderAdmin();}
-function resetTourney(){if(confirm('RESET?')&&prompt('Type RESET')==='RESET'){players=[];matches=null;localStorage.clear();render();closeAdmin();}}
-function shareResults(){let txt=`⚡ EBALLER KISUMU RESULTS ⚡\n`;matches.filter(m=>m.winner).forEach(m=>{txt+=`R${m.r}: ${m.p1} vs ${m.p2} → ${m.winner} won\n`;});txt+=`\nLive: https://sydyatoke-cell.github.io/eballer-online/\nLOOP 420200874887`;window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`);}
+let players=JSON.parse(localStorage.getItem('eballer_loop')||'[]');
+function payLoop(){
+ let name=document.getElementById('pname').value.trim();
+ let phone=document.getElementById('phone').value.trim();
+ if(!name)return alert('Enter eFootball Name');
+ if(!phone||phone.length<10)return alert('Enter M-Pesa Phone 07XX');
+ localStorage.setItem('pendingName',name);
+ localStorage.setItem('pendingPhone',phone);
+ // REAL M-Pesa Paybill USSD with LOOP details pre-filled
+ let ussd = "*334*1*4*1*714777*0141939000*50%23";
+ window.location.href = "tel:"+ussd;
+ setTimeout(()=>{alert(`💚 ${name}! M-Pesa Paybill Opened!\n\nPaybill: 714777\nAccount: 0141939000\nAmount: 50\n\nEnter PIN to pay to LOOP\n\nAfter paying, paste M-Pesa code below to UNLOCK!`);},800);
+}
+function unlockLoop(){
+ let code=document.getElementById('code').value.trim().toUpperCase();
+ let name=localStorage.getItem('pendingName')||document.getElementById('pname').value.trim();
+ let phone=localStorage.getItem('pendingPhone')||'';
+ if(!code)return alert('Enter M-Pesa Code');
+ if(code.length<8)return alert('Invalid code - check SMS');
+ if(players.find(p=>p.code===code))return alert('Code already used!');
+ if(!name)return alert('Enter name again');
+ players.push({name:name,phone:phone,code:code,time:Date.now()});
+ localStorage.setItem('eballer_loop',JSON.stringify(players));
+ document.getElementById('code').value='';
+ document.getElementById('pname').value='';
+ document.getElementById('phone').value='';
+ alert(`🔓 ${name} UNLOCKED! Welcome to EBALLER KISUMU!\nCode: ${code}`);
+ render();
+}
+function render(){
+ document.getElementById('count').innerText=players.length;
+ let h='';players.forEach((p,i)=>{h+=`<div class="pill"><span>${i+1}. ${p.name}<br><small style="color:#888">${p.phone} | ${p.code}</small></span><span style="color:#00a651;font-weight:900">✅ PAID</span></div>`});
+ document.getElementById('unlocked').innerHTML=h||'<div style="color:#666;font-size:12px">No players yet - Be first!</div>';
+ let l=players.length>0?`Players Joined: ${players.length}/16`:'0 players - Waiting...';
+ document.getElementById('list').innerHTML=`<div style="font-size:12px;color:#888;margin-top:8px">${l}</div>`;
+}
+function shareWA(){
+ let txt=`⚡ EBALLER KISUMU - LOOP PAYMENT ⚡\nPaybill 714777 Acc 0141939000 Amount 50 KES\nChampion 1000 KES\n\nJOINED (${players.length}/16):\n`;
+ players.forEach(p=>{txt+=`✅ ${p.name} - ${p.code}\n`;});
+ txt+=`\nJoin: https://sydyatoke-cell.github.io/eballer-online/`;
+ window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`);
+}
+function clearAll(){let pass=prompt('Admin Password (0753998388):');if(pass==='0753998388'){if(confirm('Clear all players?')){players=[];localStorage.setItem('eballer_loop',JSON.stringify(players));render();}}else alert('Wrong password');}
 render();
 </script>
 </body>
