@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>E-Baller Admin - Kisumu - AUTO</title>
+<title>E-Baller Admin - 32 Players</title>
 <style>
 body{margin:0;background:#0f172a;color:#fff;font-family:system-ui}
 .header{padding:14px;font-weight:900}
@@ -11,79 +11,100 @@ body{margin:0;background:#0f172a;color:#fff;font-family:system-ui}
 .tabs button{padding:8px 14px;border:none;border-radius:8px;background:#334155;color:#fff;font-weight:700}
 .tabs button.active{background:#fff;color:#000}
 .box{background:#1e293b;margin:12px;border-radius:14px;padding:14px}
-input,select{width:100%;padding:12px;border:none;border-radius:10px;margin:6px 0}
-.btn{padding:7px 12px;border:none;border-radius:7px;font-weight:800;margin:2px;cursor:pointer}
+.btn{padding:7px 12px;border:none;border-radius:7px;font-weight:800;margin:2px}
 .g{background:#22c55e;color:#000}.b{background:#3b82f6;color:#fff}.y{background:#facc15;color:#000}.r{background:#ef4444;color:#fff}
 .table{width:100%;border-collapse:collapse;margin-top:10px;font-size:11px}
-.table th{background:#0f172a;color:#fde68a;padding:8px;text-align:left;font-size:10px}
-.table td{padding:8px;border-bottom:1px solid #334155}
-.live{color:#22c55e;font-weight:900}.pending{color:#f59e0b;font-weight:900}.post{color:#facc15}.done{color:#94a3b8}
+.table th{background:#0f172a;color:#fde68a;padding:8px;text-align:left;font-size:10px;position:sticky;top:0}
+.table td{padding:7px;border-bottom:1px solid #334155}
+.live{color:#22c55e;font-weight:900}.pending{color:#f59e0b;font-weight:900}.post{color:#facc15}.complete{color:#22c55e;font-weight:900;background:#052e16;padding:3px 8px;border-radius:10px}
 .hidden{display:none}
-.fixRow{background:#0f172a}
 </style>
 </head>
 <body>
-<div class="header">E-Baller Admin - Kisumu</div>
+<div class="header">E-Baller Admin - Kisumu - 32 PLAYERS</div>
 <div class="tabs">
 <button id="t1" class="active" onclick="showTab('fixtures')">Fixtures</button>
+<button onclick="showTab('table')">Table (32)</button>
 <button onclick="showTab('unlock')">Unlock Desk</button>
-<button onclick="showTab('table')">Table</button>
 </div>
 
 <div id="fixturesTab">
 <div class="box">
 <div style="display:flex;gap:8px">
-<button class="btn b" style="flex:1" onclick="autoPick()">🎲 AUTO PICK FIXTURES</button>
+<button class="btn b" style="flex:1" onclick="autoPick()">🎲 AUTO PICK 32 FIXTURES</button>
 <button class="btn g" style="flex:1" onclick="startNext()">▶️ Start Next</button>
 <button class="btn y" style="flex:1" onclick="shareFixtures()">📲 Share</button>
 </div>
 <table class="table" id="pendingTable"></table>
-<div id="noMatch" style="text-align:center;color:#64748b;padding:15px">Tap AUTO PICK to generate fixtures</div>
+<div id="noMatch" style="text-align:center;color:#64748b;padding:15px">Tap AUTO PICK</div>
 </div>
 </div>
 
-<div id="unlockTab" class="hidden"><div class="box"><h3>🔓 Unlock Desk</h3><select id="unlockSel"><option>Table 1</option><option>Table 2</option><option>Table 3</option><option>Table 4</option><option>Table 5</option><option>Table 6</option><option>Table 7</option><option>Table 8</option></select><button class="btn b" style="width:100%;margin-top:8px" onclick="unlockDesk()">Unlock Desk</button><div id="deskStatus" style="margin-top:10px"></div></div></div>
+<div id="tableTab" class="hidden">
+<div class="box">
+<h3>🏆 League Table - 32 Players - Auto Updates</h3>
+<div style="max-height:70vh;overflow:auto">
+<table class="table" id="leagueTable"></table>
+</div>
+<button class="btn g" style="width:100%;margin-top:10px" onclick="shareTable()">📲 Share Table to WhatsApp Group</button>
+</div>
+</div>
 
-<div id="tableTab" class="hidden"><div class="box"><h3>🏆 Table - Auto Updates</h3><table class="table" id="leagueTable"></table><button class="btn g" style="width:100%;margin-top:10px" onclick="shareTable()">Share Table to WhatsApp Group</button></div></div>
+<div id="unlockTab" class="hidden"><div class="box"><h3>🔓 Unlock Desk</h3><select id="unlockSel"><option>Table 1</option><option>Table 2</option><option>Table 3</option><option>Table 4</option><option>Table 5</option><option>Table 6</option><option>Table 7</option><option>Table 8</option></select><button class="btn b" style="width:100%;margin-top:8px" onclick="unlockDesk()">Unlock</button><div id="deskStatus" style="margin-top:10px"></div></div></div>
 
 <script>
-var league=JSON.parse(localStorage.getItem("eballer_league")||"[]");
-var fixtures=JSON.parse(localStorage.getItem("eb_fixtures")||"[]");
-var desks=JSON.parse(localStorage.getItem("eb_desks")||"{}");
+var league=JSON.parse(localStorage.getItem("eballer_league32")||"[]");
+var fixtures=JSON.parse(localStorage.getItem("eb_fixtures32")||"[]");
+var desks=JSON.parse(localStorage.getItem("eb_desks32")||"{}");
+
 if(league.length==0){
-league=[{name:"Prince Nyaru",P:0,W:0,L:0,PTS:0},{name:"Mosalah Jnr",P:0,W:0,L:0,PTS:0},{name:"Magnusefb",P:0,W:0,L:0,PTS:0},{name:"Stone Of Heaven",P:0,W:0,L:0,PTS:0},{name:"Chris Gray",P:0,W:0,L:0,PTS:0},{name:"Jah Raze",P:0,W:0,L:0,PTS:0},{name:"Ghost",P:0,W:0,L:0,PTS:0},{name:"Sydyato",P:0,W:0,L:0,PTS:0}];
+var names=["Prince Nyaru","Mosalah Jnr","Magnusefb","Stone Of Heaven","Chris Gray","Jah Raze","Ghost","Sydyato","Brian","Otieno","Kisumu Kings","Lakers","Moses","Kevin","Denis","Ally","Victor","John","Peter","James","Ochieng","Omondi","Odhiambo","Okello","Obama","Rooney","Messi","Ronaldo","Neymar","Salah","Mbappe","Haaland"];
+for(var i=0;i<32;i++){
+league.push({name:names[i],P:0,W:0,L:0,PTS:0});
+}
 }
 for(var i=1;i<=8;i++){if(!desks["Table "+i]){desks["Table "+i]="free";}}
-function save(){localStorage.setItem("eb_fixtures",JSON.stringify(fixtures));localStorage.setItem("eballer_league",JSON.stringify(league));localStorage.setItem("eb_desks",JSON.stringify(desks));}
-function showTab(id){document.getElementById("fixturesTab").classList.add("hidden");document.getElementById("unlockTab").classList.add("hidden");document.getElementById("tableTab").classList.add("hidden");document.getElementById(id+"Tab").classList.remove("hidden");}
+
+function save(){
+localStorage.setItem("eb_fixtures32",JSON.stringify(fixtures));
+localStorage.setItem("eballer_league32",JSON.stringify(league));
+localStorage.setItem("eb_desks32",JSON.stringify(desks));
+}
+function showTab(id){
+document.getElementById("fixturesTab").classList.add("hidden");
+document.getElementById("tableTab").classList.add("hidden");
+document.getElementById("unlockTab").classList.add("hidden");
+document.getElementById(id+"Tab").classList.remove("hidden");
+}
 
 function autoPick(){
 fixtures=[];
 for(var i=1;i<=8;i++){desks["Table "+i]="free";}
-for(var i=0;i<league.length;i+=2){
+for(var i=0;i<32;i+=2){
 if(league[i+1]){
 var t="Table "+((i/2)%8+1);
 fixtures.push({a:league[i].name,b:league[i+1].name,table:t,fee:"50",status:"pending",winner:""});
-desks[t]="busy: "+league[i].name+" vs "+league[i+1].name;
+if(i<16){desks[t]="busy: "+league[i].name+" vs "+league[i+1].name;}
 }
 }
 render();
 }
-function startNext(){for(var i=0;i<fixtures.length;i++){if(fixtures[i].status=="pending"){fixtures[i].status="live";render();break;}}}
+function startNext(){for(var i=0;i<fixtures.length;i++){if(fixtures[i].status=="pending"){fixtures[i].status="live";desks[fixtures[i].table]="busy: "+fixtures[i].a+" vs "+fixtures[i].b;render();break;}}}
 
 function render(){
 var pt=document.getElementById("pendingTable");
-var html="<tr><th>MATCH</th><th>TABLE</th><th>STATUS</th><th>ACTION - You Decide</th></tr>";
+var html="<tr><th>MATCH</th><th>TABLE</th><th>STATUS</th><th>YOUR ACTION</th></tr>";
 var has=false;
 for(var i=0;i<fixtures.length;i++){
 var fx=fixtures[i];
-if(fx.status!="done"){has=true;}
-var statusColor="pending";
-if(fx.status=="live"){statusColor="live";}
-if(fx.status=="postponed"){statusColor="post";}
-if(fx.status=="done"){statusColor="done";}
+if(fx.status!="complete"){has=true;}
+var statusText=fx.status.toUpperCase();
+var statusClass="pending";
+if(fx.status=="live"){statusClass="live"; statusText="LIVE";}
+if(fx.status=="postponed"){statusClass="post"; statusText="POSTPONED";}
+if(fx.status=="complete"){statusClass="complete"; statusText="COMPLETE";}
 
-html+="<tr class=fixRow><td><b>"+fx.a+"<br>vs "+fx.b+"</b>"+(fx.winner?"<br><small style=color:#22c55e>Winner: "+fx.winner+"</small>":"")+"</td><td>"+fx.table+"<br><small>"+fx.fee+"</small></td><td class="+statusColor+">"+fx.status.toUpperCase()+"</td><td>";
+html+="<tr><td><b>"+fx.a+"<br>vs "+fx.b+"</b>"+(fx.winner?"<br><small style=color:#22c55e>Winner: "+fx.winner+"</small>":"")+"</td><td>"+fx.table+"</td><td><span class="+statusClass+">"+statusText+"</span></td><td>";
 
 if(fx.status=="pending"){
 html+="<button class='btn b' onclick='setLive("+i+")'>▶️ Start</button><br><button class='btn r' onclick='cancelMatch("+i+")'>❌ Cancel</button>";
@@ -92,39 +113,61 @@ if(fx.status=="live"){
 html+="<button class='btn g' onclick='award("+i+")'>🏆 Result</button><br><button class='btn y' onclick='postpone("+i+")'>⏸️ Postponed</button><br><button class='btn r' onclick='disq("+i+")'>🚫 Disqualify</button>";
 }
 if(fx.status=="postponed"){
-html+="<button class='btn b' onclick='rematch("+i+")'>🔄 Resume</button><br><button class='btn r' onclick='cancelMatch("+i+")'>❌ Cancel</button>";
+html+="<button class='btn b' onclick='rematch("+i+")'>🔄 Resume</button>";
 }
-if(fx.status=="done"){
-html+="<small>Done</small><br><button class='btn b' onclick='rematch("+i+")'>Rematch</button>";
+if(fx.status=="complete"){
+html+="<span style=color:#22c55e;font-weight:900>✅ COMPLETE</span><br><button class='btn b' onclick='rematch("+i+")'>Rematch</button>";
 }
 html+="</td></tr>";
 }
 pt.innerHTML=html;
 document.getElementById("noMatch").style.display=has?"none":"block";
 
-// league
+// league 32
 league.sort(function(a,b){return b.PTS-a.PTS;});
 var lt=document.getElementById("leagueTable");
-var lh="<tr><th>#</th><th>Player</th><th>P</th><th>W</th><th>PTS</th></tr>";
-for(var i=0;i<league.length;i++){lh+="<tr><td>"+(i+1)+"</td><td>"+league[i].name+"</td><td>"+league[i].P+"</td><td>"+league[i].W+"</td><td style=color:#facc15;font-weight:900>"+league[i].PTS+"</td></tr>";}
+var lh="<tr><th>#</th><th>Player</th><th>P</th><th>W</th><th>L</th><th>PTS</th></tr>";
+for(var i=0;i<league.length;i++){
+var crown=i==0?"👑 ":"";
+lh+="<tr><td>"+(i+1)+"</td><td>"+crown+league[i].name+"</td><td>"+league[i].P+"</td><td>"+league[i].W+"</td><td>"+league[i].L+"</td><td style=color:#facc15;font-weight:900>"+league[i].PTS+"</td></tr>";
+}
 lt.innerHTML=lh;
 
 // desks
 var ds=document.getElementById("deskStatus");
+if(ds){
 var dhtml="";
 for(var i=1;i<=8;i++){var n="Table "+i;dhtml+="<div style=padding:6px;background:#0f172a;margin:4px 0;border-radius:6px;display:flex;justify-content:space-between><span>"+n+"</span><span style=color:"+(desks[n]=="free"?"#22c55e":"#ef4444")+">"+desks[n]+"</span></div>";}
-if(ds){ds.innerHTML=dhtml;}
+ds.innerHTML=dhtml;
+}
 save();
 }
+
 function setLive(i){fixtures[i].status="live";desks[fixtures[i].table]="busy: "+fixtures[i].a+" vs "+fixtures[i].b;render();}
 function unlockDesk(){var t=document.getElementById("unlockSel").value;desks[t]="free";render();}
-function award(i){var fx=fixtures[i];var w=prompt("Who won? "+fx.a+" OR "+fx.b,fx.a);if(!w){return;}if(w!=fx.a && w!=fx.b){alert("Type exact");return;}fx.winner=w;fx.status="done";for(var j=0;j<league.length;j++){if(league[j].name==fx.a||league[j].name==fx.b){league[j].P++;}if(league[j].name==w){league[j].W++;league[j].PTS=league[j].W*3;}else if(league[j].name==fx.a||league[j].name==fx.b){league[j].L++;}}desks[fx.table]="free";render();var txt="🏆 RESULT - "+fx.a+" vs "+fx.b+" @ "+fx.table+"%0AWinner: *"+w+"*%0ATable auto updated & Desk FREE";window.open("https://wa.me/?text="+txt,"_blank");}
-function postpone(i){fixtures[i].status="postponed";desks[fixtures[i].table]="postponed: "+fixtures[i].a+" vs "+fixtures[i].b;render();}
+function award(i){
+var fx=fixtures[i];
+var w=prompt("Who won? Type: "+fx.a+" OR "+fx.b,fx.a);
+if(!w){return;}
+fx.winner=w;
+fx.status="complete";
+for(var j=0;j<league.length;j++){
+if(league[j].name==fx.a||league[j].name==fx.b){league[j].P++;}
+if(league[j].name==w){league[j].W++;league[j].PTS=league[j].W*3;}
+else if(league[j].name==fx.a||league[j].name==fx.b){league[j].L++;}
+}
+desks[fx.table]="free";
+render();
+var txt="✅ *COMPLETE* - "+fx.a+" vs "+fx.b+" @ "+fx.table+"%0AWinner: *"+w+"*%0ADesk FREE";
+window.open("https://wa.me/?text="+txt,"_blank");
+}
+function postpone(i){fixtures[i].status="postponed";desks[fixtures[i].table]="postponed";render();}
 function rematch(i){fixtures[i].status="pending";fixtures[i].winner="";desks[fixtures[i].table]="busy: "+fixtures[i].a+" vs "+fixtures[i].b;render();}
-function cancelMatch(i){if(confirm("Cancel this match?")){var t=fixtures[i].table;fixtures.splice(i,1);desks[t]="free";render();}}
-function disq(i){var fx=fixtures[i];var who=prompt("Disqualify who? "+fx.a+" OR "+fx.b,fx.a);if(!who){return;}if(confirm("Disqualify "+who+"?")){league=league.filter(function(p){return p.name!=who});fixtures=fixtures.filter(function(f){return f.a!=who && f.b!=who});for(var k in desks){if(desks[k].indexOf(who)!=-1){desks[k]="free";}}render();}}
-function shareTable(){var txt="🎱 *E-BALLER KISUMU TABLE* %0A";for(var i=0;i<league.length;i++){txt+=(i+1)+". "+league[i].name+" PTS:"+league[i].PTS+"%0A";}window.open("https://wa.me/?text="+txt,"_blank");}
-function shareFixtures(){var txt="📋 *FIXTURES AUTO PICKED* %0A";for(var i=0;i<fixtures.length;i++){if(fixtures[i].status!="done"){txt+="• "+fixtures[i].a+" vs "+fixtures[i].b+" @ "+fixtures[i].table+" ["+fixtures[i].status+"]%0A";}}window.open("https://wa.me/?text="+txt,"_blank");}
+function cancelMatch(i){if(confirm("Cancel?")){var t=fixtures[i].table;fixtures.splice(i,1);desks[t]="free";render();}}
+function disq(i){var fx=fixtures[i];var who=prompt("Disqualify who? "+fx.a+" or "+fx.b,fx.a);if(!who){return;}league=league.filter(function(p){return p.name!=who});fixtures=fixtures.filter(function(f){return f.a!=who && f.b!=who});render();}
+function shareTable(){var txt="🏆 *32 PLAYERS TABLE* %0A";for(var i=0;i<league.length;i++){txt+=(i+1)+". "+league[i].name+" PTS:"+league[i].PTS+"%0A";}window.open("https://wa.me/?text="+txt,"_blank");}
+function shareFixtures(){var txt="📋 *FIXTURES - 32 PLAYERS* %0A";for(var i=0;i<fixtures.length;i++){var s=fixtures[i].status=="complete"?"COMPLETE":fixtures[i].status.toUpperCase();txt+="• "+fixtures[i].a+" vs "+fixtures[i].b+" @ "+fixtures[i].table+" ["+s+"]%0A";}window.open("https://wa.me/?text="+txt,"_blank");}
+
 render();
 if(fixtures.length==0){autoPick();}
 </script>
