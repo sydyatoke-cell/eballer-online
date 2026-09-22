@@ -1,22 +1,93 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Eballer Pool</title>
-<style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}body{background:#0f1215;color:#fff}.h{background:#151a1f;padding:15px;display:flex;justify-content:space-between;border-bottom:2px solid #00ff88;position:sticky;top:0}.logo{color:#00ff88;font-weight:900}.bal{background:#00ff88;color:#000;padding:6px 14px;border-radius:20px;font-weight:800}.c{max-width:600px;margin:15px auto;padding:12px}.card{background:#1c232a;border-radius:16px;padding:16px;margin-bottom:12px;border:1px solid #2a3440}.pb{background:linear-gradient(135deg,#00ff88,#00cc6a);color:#000;border-radius:12px;padding:14px;font-weight:800}.v{background:#000;color:#00ff88;padding:4px 10px;border-radius:6px;font-family:monospace}input{width:100%;padding:14px;background:#0f1215;border:1px solid #2a3440;border-radius:10px;color:#fff;margin:8px 0}.btn{width:100%;padding:14px;border:none;border-radius:12px;font-weight:900;cursor:pointer}.btn-g{background:#00ff88;color:#000}.locked{position:relative}.lock-overlay{position:absolute;inset:0;background:rgba(15,18,21,.92);backdrop-filter:blur(6px);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;z-index:5}.table{width:100%;height:160px;background:radial-gradient(#1a5c2a,#0f3d1a);border:8px solid #5a2d0c;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:10px 0}.fixture{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#151a1f;border-radius:10px;margin:8px 0}</style>
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E-Baller Kisumu - Register</title>
+<style>body{margin:0;background:#0f172a;color:#fff;font-family:system-ui}.h{background:#37003c;padding:14px;display:flex;justify-content:space-between;font-weight:900;position:sticky;top:0}.card{background:#1e293b;margin:12px;border-radius:14px;padding:14px}.pb{background:linear-gradient(135deg,#00ff88,#00cc6a);color:#000;padding:12px;border-radius:10px;font-weight:800}.v{background:#000;color:#00ff88;padding:4px 8px;border-radius:6px;font-family:monospace}input{width:100%;padding:12px;border-radius:10px;border:none;margin:6px 0}.btn{width:100%;padding:12px;border:none;border-radius:10px;font-weight:900}.btn-g{background:#00ff88;color:#000}.table{width:100%;border-collapse:collapse}.table th{background:#37003c;color:#fff;padding:8px;font-size:10px}.table td{background:#fff;color:#000;padding:8px;border-bottom:1px solid #ddd;text-align:center;font-size:12px}.table td:nth-child(2){text-align:left;font-weight:700}</style>
 </head><body>
-<div class="h"><div class="logo">EBALLER POOL</div><div class="bal">KES <span id="bal">0</span></div></div>
-<div class="c">
-<div class="card" id="depositCard"><h3 style="color:#00ff88">💰 Deposit - Lipa na M-Pesa</h3>
-<div class="pb"><div style="display:flex;justify-content:space-between"><span>Paybill</span><span class="v">714777</span></div><div style="display:flex;justify-content:space-between;margin-top:8px"><span>Account</span><span class="v">0141939000</span></div></div>
-<input id="p" placeholder="Phone 07..."><input id="a" type="number" value="150"><input id="c" placeholder="M-PESA CODE TJ..." style="text-transform:uppercase;border:2px solid #00ff88"><button class="btn btn-g" onclick="deposit()">SUBMIT CODE</button><div id="status" style="margin-top:10px;color:#ffa500;font-size:13px"></div></div>
-<div class="card locked"><div class="lock-overlay" id="lockOverlay"><div style="font-size:50px">🔒</div><h3>Tables Locked</h3><p style="color:#8a9bb0;font-size:13px">Pay via Paybill 714777 Acc 0141939000<br>Submit code, wait admin</p></div>
-<h3 style="color:#00ff88">🎱 Pool Tables</h3><div class="table"><span style="font-weight:900">TABLE 1 - OPEN</span></div>
-<h3 style="color:#00ff88;margin-top:15px">📅 Fixtures Today - Kisumu</h3><div class="fixture"><span>Brian vs Otieno</span><span style="color:#00ff88">7PM</span></div><div class="fixture"><span>Kings Final - Prize 1000</span><button class="btn btn-g" style="width:auto;padding:6px 12px" onclick="joinGame()">JOIN 150</button></div></div>
+<div class="h"><div>EBALLER KISUMU</div><div style="background:#00ff88;color:#000;padding:4px 10px;border-radius:20px;font-size:12px">REGISTER TO PLAY</div></div>
+
+<div class="card" id="regCard">
+<h3 style="color:#00ff88">💰 Pay to Join League - 32 Slots Only</h3>
+<div class="pb">
+<div style="display:flex;justify-content:space-between"><span>Paybill</span><span class="v">714777</span></div>
+<div style="display:flex;justify-content:space-between;margin-top:6px"><span>Account</span><span class="v">0141939000</span></div>
+<div style="margin-top:6px;font-size:12px">Amount: 150 KES</div>
 </div>
+<input id="name" placeholder="Your Pool Name e.g. Prince Nyaru">
+<input id="phone" placeholder="Phone 07...">
+<input id="code" placeholder="M-Pesa Code TJ... e.g. TJ123ABC" style="text-transform:uppercase;border:2px solid #00ff88">
+<button class="btn btn-g" onclick="register()">SUBMIT CODE & REGISTER</button>
+<div id="status" style="margin-top:10px;font-size:12px;color:#ffa500"></div>
+</div>
+
+<div class="card" id="lockedCard" style="display:none;text-align:center;padding:30px">
+<div style="font-size:50px">🔒</div>
+<h3>Waiting Approval</h3>
+<p style="color:#8a9bb0;font-size:13px">Your code <span id="codeShow"></span> sent. Admin checking Loop 0141939000. Table will unlock when approved.</p>
+</div>
+
+<div class="card" id="okCard" style="display:none">
+<h3 style="color:#00ff88;text-align:center">✅ You Are Registered!</h3>
+<p style="text-align:center;color:#8a9bb0">You are in the EPL Table. Wait for fixtures.</p>
+</div>
+
+<div class="card" style="background:#fff;padding:0;overflow:hidden">
+<div style="background:#37003c;color:#fff;padding:10px;font-weight:900">🏴󐁧󐁢󐁥󐁮󐁧󐁿 EPL Table - Only Paid Members</div>
+<table class="table" id="leagueTable"></table>
+</div>
+
 <script>
-const BACKEND="https://eballer-backend.onrender.com";
-let myPhone=localStorage.getItem('eb_phone')||'',approved=false,bal=0;
-function updateUI(){document.getElementById('bal').innerText=bal;document.getElementById('lockOverlay').style.display=approved?'none':'flex';document.getElementById('depositCard').style.display=approved?'none':'block';}
-async function deposit(){let ph=document.getElementById('p').value.trim(),am=document.getElementById('a').value,cd=document.getElementById('c').value.trim().toUpperCase();if(!ph||!cd)return alert('Enter phone & code');myPhone=ph;localStorage.setItem('eb_phone',ph);document.getElementById('status').innerText='Sending...';try{let r=await fetch(BACKEND+'/api/deposit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:ph,amount:am,mpesaCode:cd})});let j=await r.json();if(j.success){document.getElementById('status').innerText='⏳ Pending '+cd+' - Admin checking Loop';alert('Submitted! Tables will unlock after admin');startPolling();}}catch(e){document.getElementById('status').innerText='Backend not reachable - check Render URL';}}
-async function checkApproval(){if(!myPhone)return;try{let r=await fetch(BACKEND+'/api/check/'+myPhone);let j=await r.json();if(j.approved&&!approved){approved=true;bal=j.balance;updateUI();alert('🎉 APPROVED! Tables unlocked KES '+bal);} }catch(e){}}
-function startPolling(){setInterval(checkApproval,4000);checkApproval();}
-function joinGame(){if(!approved)return alert('Pay first');alert('Joined! Be at hall 7PM');}
-if(myPhone){document.getElementById('p').value=myPhone;startPolling();}updateUI();
-</script></body></html>
+var members=JSON.parse(localStorage.getItem("eballer_league32")||"[]");
+var deposits=JSON.parse(localStorage.getItem("eb_deposits")||"[]");
+var myPhone=localStorage.getItem("my_phone")||"";
+function renderTable(){
+members.sort(function(a,b){return b.PTS-a.PTS;});
+var html="<tr><th>#</th><th>Club</th><th>Pl</th><th>W</th><th>Pts</th></tr>";
+for(var i=0;i<members.length;i++){
+var m=members[i];
+var crown=i==0?"👑 ":"";
+html+="<tr><td>"+(i+1)+"</td><td style=text-align:left>"+crown+m.name+"</td><td>"+m.P+"</td><td>"+m.W+"</td><td style=font-weight:900>"+m.PTS+"</td></tr>";
+}
+if(members.length==0){html+="<tr><td colspan=5 style=color:#888>No registered members yet - Be first to pay!</td></tr>";}
+document.getElementById("leagueTable").innerHTML=html;
+}
+function checkMyStatus(){
+var myDep=deposits.filter(function(d){return d.phone==myPhone;});
+var approved=myDep.some(function(d){return d.status=="APPROVED";});
+var pending=myDep.some(function(d){return d.status=="PENDING";});
+if(approved){
+document.getElementById("regCard").style.display="none";
+document.getElementById("lockedCard").style.display="none";
+document.getElementById("okCard").style.display="block";
+document.getElementById("status").innerHTML="✅ Approved - You are in table";
+}else if(pending){
+document.getElementById("regCard").style.display="none";
+document.getElementById("lockedCard").style.display="block";
+document.getElementById("codeShow").innerText=myDep[0].code;
+document.getElementById("status").innerHTML="⏳ Pending - Code "+myDep[0].code+" waiting admin";
+}
+}
+function register(){
+var n=document.getElementById("name").value.trim();
+var p=document.getElementById("phone").value.trim();
+var c=document.getElementById("code").value.trim().toUpperCase();
+if(!n||!p||!c){alert("Enter name, phone & M-Pesa code");return;}
+if(members.length>=32){alert("League full - 32 players reached");return;}
+var exists=members.some(function(m){return m.name.toLowerCase()==n.toLowerCase();});
+if(exists){alert("Name already registered");return;}
+deposits.unshift({name:n,phone:p,code:c,amount:150,status:"PENDING",time:new Date().toLocaleString()});
+localStorage.setItem("eb_deposits",JSON.stringify(deposits));
+localStorage.setItem("my_phone",p);
+myPhone=p;
+checkMyStatus();
+renderTable();
+alert("Code "+c+" submitted. Admin will check Loop 0141939000 and approve you.");
+}
+renderTable();
+checkMyStatus();
+setInterval(function(){
+members=JSON.parse(localStorage.getItem("eballer_league32")||"[]");
+deposits=JSON.parse(localStorage.getItem("eb_deposits")||"[]");
+renderTable();
+checkMyStatus();
+},3000);
+</script>
+</body></html>
