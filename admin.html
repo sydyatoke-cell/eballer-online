@@ -1,25 +1,132 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E-Baller FIXED - NEVER BLANK</title><style>body{margin:0;background:#060b18;color:#fff;font-family:sans-serif;padding:8px}.card{background:#1e293b;padding:12px;border-radius:12px;margin:10px 0}button{padding:12px;border:none;border-radius:8px;font-weight:900;margin:4px;cursor:pointer}.green{background:#22c55e}.blue{background:#3b82f6;color:#fff}.gold{background:#facc15}.red{background:#ef4444;color:#fff}.desk{display:grid;grid-template-columns:1fr 1fr;gap:8px}.box{padding:16px;border-radius:10px;text-align:center;font-weight:900}.free{background:#22c55e;color:#000}.busy{background:#ef4444}.hidden{display:none}input,select{width:100%;padding:12px;border-radius:8px;border:none;margin:4px 0}</style></head><body>
-<div class="card" id="loginBox" style="max-width:360px;margin:20px auto;text-align:center"><h2>🎱 E-BALLER DESK</h2><h3>PIN 1234</h3><input id="pin" type="password" placeholder="1234"><button class="green" style="width:100%" onclick="go()">UNLOCK - TAP HERE</button><div id="msg"></div></div>
-<div id="main" class="hidden">
-<div class="card"><h3>🎱 8 DESKS - Tap to Lock</h3><div id="desks" class="desk"></div></div>
-<div class="card"><h3>🏆 TABLE - Auto Updates</h3><div id="rows"></div><button class="green" style="width:100%" onclick="shareTable()">📲 Share Table to WhatsApp Group</button></div>
-<div class="card"><h3>⚡ FIXTURES - Auto Picks</h3><div id="fixtures"></div><div style="display:flex"><button class="blue" style="flex:1" onclick="autoPick()">Auto-Pick</button><button class="green" style="flex:1" onclick="startNext()">Start Next</button></div></div>
-<div class="card"><h3>🎮 REFEREE - Your Controls</h3><select id="liveMatch"></select><select id="deskSel"><option>Table 1</option><option>Table 2</option><option>Table 3</option><option>Table 4</option><option>Table 5</option><option>Table 6</option><option>Table 7</option><option>Table 8</option></select><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><button class="green" onclick="award()">🏆 Award Winner</button><button class="blue" onclick="unlockDesk()">🔓 Unlock Desk</button><button class="gold" onclick="post()">⏸️ Postpone</button><button class="red" onclick="disq()">🚫 Disqualify</button></div><div id="hist" style="font-size:10px;margin-top:8px"></div></div>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>E-Baller Admin - Kisumu - AUTO</title>
+<style>
+body{margin:0;background:#0f172a;color:#fff;font-family:system-ui}
+.header{padding:14px;font-weight:900}
+.tabs{display:flex;gap:8px;padding:0 12px}
+.tabs button{padding:8px 14px;border:none;border-radius:8px;background:#334155;color:#fff;font-weight:700}
+.tabs button.active{background:#fff;color:#000}
+.box{background:#1e293b;margin:12px;border-radius:14px;padding:14px}
+input,select{width:100%;padding:12px;border:none;border-radius:10px;margin:6px 0}
+.btn{padding:7px 12px;border:none;border-radius:7px;font-weight:800;margin:2px;cursor:pointer}
+.g{background:#22c55e;color:#000}.b{background:#3b82f6;color:#fff}.y{background:#facc15;color:#000}.r{background:#ef4444;color:#fff}
+.table{width:100%;border-collapse:collapse;margin-top:10px;font-size:11px}
+.table th{background:#0f172a;color:#fde68a;padding:8px;text-align:left;font-size:10px}
+.table td{padding:8px;border-bottom:1px solid #334155}
+.live{color:#22c55e;font-weight:900}.pending{color:#f59e0b;font-weight:900}.post{color:#facc15}.done{color:#94a3b8}
+.hidden{display:none}
+.fixRow{background:#0f172a}
+</style>
+</head>
+<body>
+<div class="header">E-Baller Admin - Kisumu</div>
+<div class="tabs">
+<button id="t1" class="active" onclick="showTab('fixtures')">Fixtures</button>
+<button onclick="showTab('unlock')">Unlock Desk</button>
+<button onclick="showTab('table')">Table</button>
 </div>
+
+<div id="fixturesTab">
+<div class="box">
+<div style="display:flex;gap:8px">
+<button class="btn b" style="flex:1" onclick="autoPick()">🎲 AUTO PICK FIXTURES</button>
+<button class="btn g" style="flex:1" onclick="startNext()">▶️ Start Next</button>
+<button class="btn y" style="flex:1" onclick="shareFixtures()">📲 Share</button>
+</div>
+<table class="table" id="pendingTable"></table>
+<div id="noMatch" style="text-align:center;color:#64748b;padding:15px">Tap AUTO PICK to generate fixtures</div>
+</div>
+</div>
+
+<div id="unlockTab" class="hidden"><div class="box"><h3>🔓 Unlock Desk</h3><select id="unlockSel"><option>Table 1</option><option>Table 2</option><option>Table 3</option><option>Table 4</option><option>Table 5</option><option>Table 6</option><option>Table 7</option><option>Table 8</option></select><button class="btn b" style="width:100%;margin-top:8px" onclick="unlockDesk()">Unlock Desk</button><div id="deskStatus" style="margin-top:10px"></div></div></div>
+
+<div id="tableTab" class="hidden"><div class="box"><h3>🏆 Table - Auto Updates</h3><table class="table" id="leagueTable"></table><button class="btn g" style="width:100%;margin-top:10px" onclick="shareTable()">Share Table to WhatsApp Group</button></div></div>
+
 <script>
-var league=[{n:"Prince Nyaru",P:0,W:0,L:0,PTS:0},{n:"Mosalah Jnr",P:0,W:0,L:0,PTS:0},{n:"Magnusefb",P:0,W:0,L:0,PTS:0},{n:"Stone Of Heaven",P:0,W:0,L:0,PTS:0},{n:"Chris Gray",P:0,W:0,L:0,PTS:0},{n:"Jah Raze",P:0,W:0,L:0,PTS:0},{n:"Ghost",P:0,W:0,L:0,PTS:0},{n:"Sydyato",P:0,W:0,L:0,PTS:0}];
-var fixtures=[];var desks={};for(var i=1;i<=8;i++)desks["Table "+i]="free";var hist=[];
-function go(){var p=document.getElementById("pin").value;if(p=="1234"){document.getElementById("loginBox").style.display="none";document.getElementById("main").classList.remove("hidden");init();}else{document.getElementById("msg").innerHTML="Wrong - use 1234";}}
-function init(){autoPick();render();}
-function render(){var h="";league.sort((a,b)=>b.PTS-a.PTS);league.forEach((t,i)=>{h+="<div style='display:flex;justify-content:space-between;padding:6px;border-bottom:1px solid #333;"+(i==0?"background:gold;color:#000;font-weight:900":"")+"'><span>"+(i+1)+". "+(i==0?"👑 ":"")+t.n+"</span><span>P:"+t.P+" W:"+t.W+" PTS:"+t.PTS+"</span></div>";});document.getElementById("rows").innerHTML=h;renderDesks();renderFix();}
-function renderDesks(){var d=document.getElementById("desks");d.innerHTML="";for(var i=1;i<=8;i++){var name="Table "+i;var st=desks[name];var div=document.createElement("div");div.className="box "+(st=="free"?"free":"busy");div.innerHTML=name+"<br><small>"+st+"</small>";div.setAttribute("data-t",name);div.onclick=function(){var tn=this.getAttribute("data-t");if(desks[tn]=="free"){var m=prompt("Match? e.g. Otis vs Brian");if(m)desks[tn]="busy: "+m;}else{desks[tn]="free";}renderDesks();};d.appendChild(div);}}
-function renderFix(){var f=document.getElementById("fixtures");f.innerHTML="";fixtures.forEach((fx,i)=>{var div=document.createElement("div");div.style="background:#0f172a;padding:8px;margin:4px 0;border-radius:6px;display:flex;justify-content:space-between";div.innerHTML="<span><b>"+fx.a+" vs "+fx.b+"</b><br><small>"+fx.table+" - "+fx.status+"</small></span><button class='blue' onclick='setLive("+i+")'>Start</button>";f.appendChild(div);});var sel=document.getElementById("liveMatch");sel.innerHTML="";fixtures.forEach((fx,i)=>{if(fx.status!="done"){var o=document.createElement("option");o.value=i;o.text=fx.a+" vs "+fx.b+" @ "+fx.table;sel.appendChild(o);}});document.getElementById("hist").innerHTML=hist.join("<br>");}
-function autoPick(){fixtures=[];for(var i=0;i<league.length;i+=2){if(league[i+1])fixtures.push({a:league[i].n,b:league[i+1].n,table:"Table "+((i/2)%8+1),status:"upcoming",winner:""});}renderFix();}
-function startNext(){for(var i=0;i<fixtures.length;i++){if(fixtures[i].status=="upcoming"){fixtures[i].status="live";desks[fixtures[i].table]="busy: "+fixtures[i].a+" vs "+fixtures[i].b;break;}}render();}
+var league=JSON.parse(localStorage.getItem("eballer_league")||"[]");
+var fixtures=JSON.parse(localStorage.getItem("eb_fixtures")||"[]");
+var desks=JSON.parse(localStorage.getItem("eb_desks")||"{}");
+if(league.length==0){
+league=[{name:"Prince Nyaru",P:0,W:0,L:0,PTS:0},{name:"Mosalah Jnr",P:0,W:0,L:0,PTS:0},{name:"Magnusefb",P:0,W:0,L:0,PTS:0},{name:"Stone Of Heaven",P:0,W:0,L:0,PTS:0},{name:"Chris Gray",P:0,W:0,L:0,PTS:0},{name:"Jah Raze",P:0,W:0,L:0,PTS:0},{name:"Ghost",P:0,W:0,L:0,PTS:0},{name:"Sydyato",P:0,W:0,L:0,PTS:0}];
+}
+for(var i=1;i<=8;i++){if(!desks["Table "+i]){desks["Table "+i]="free";}}
+function save(){localStorage.setItem("eb_fixtures",JSON.stringify(fixtures));localStorage.setItem("eballer_league",JSON.stringify(league));localStorage.setItem("eb_desks",JSON.stringify(desks));}
+function showTab(id){document.getElementById("fixturesTab").classList.add("hidden");document.getElementById("unlockTab").classList.add("hidden");document.getElementById("tableTab").classList.add("hidden");document.getElementById(id+"Tab").classList.remove("hidden");}
+
+function autoPick(){
+fixtures=[];
+for(var i=1;i<=8;i++){desks["Table "+i]="free";}
+for(var i=0;i<league.length;i+=2){
+if(league[i+1]){
+var t="Table "+((i/2)%8+1);
+fixtures.push({a:league[i].name,b:league[i+1].name,table:t,fee:"50",status:"pending",winner:""});
+desks[t]="busy: "+league[i].name+" vs "+league[i+1].name;
+}
+}
+render();
+}
+function startNext(){for(var i=0;i<fixtures.length;i++){if(fixtures[i].status=="pending"){fixtures[i].status="live";render();break;}}}
+
+function render(){
+var pt=document.getElementById("pendingTable");
+var html="<tr><th>MATCH</th><th>TABLE</th><th>STATUS</th><th>ACTION - You Decide</th></tr>";
+var has=false;
+for(var i=0;i<fixtures.length;i++){
+var fx=fixtures[i];
+if(fx.status!="done"){has=true;}
+var statusColor="pending";
+if(fx.status=="live"){statusColor="live";}
+if(fx.status=="postponed"){statusColor="post";}
+if(fx.status=="done"){statusColor="done";}
+
+html+="<tr class=fixRow><td><b>"+fx.a+"<br>vs "+fx.b+"</b>"+(fx.winner?"<br><small style=color:#22c55e>Winner: "+fx.winner+"</small>":"")+"</td><td>"+fx.table+"<br><small>"+fx.fee+"</small></td><td class="+statusColor+">"+fx.status.toUpperCase()+"</td><td>";
+
+if(fx.status=="pending"){
+html+="<button class='btn b' onclick='setLive("+i+")'>▶️ Start</button><br><button class='btn r' onclick='cancelMatch("+i+")'>❌ Cancel</button>";
+}
+if(fx.status=="live"){
+html+="<button class='btn g' onclick='award("+i+")'>🏆 Result</button><br><button class='btn y' onclick='postpone("+i+")'>⏸️ Postponed</button><br><button class='btn r' onclick='disq("+i+")'>🚫 Disqualify</button>";
+}
+if(fx.status=="postponed"){
+html+="<button class='btn b' onclick='rematch("+i+")'>🔄 Resume</button><br><button class='btn r' onclick='cancelMatch("+i+")'>❌ Cancel</button>";
+}
+if(fx.status=="done"){
+html+="<small>Done</small><br><button class='btn b' onclick='rematch("+i+")'>Rematch</button>";
+}
+html+="</td></tr>";
+}
+pt.innerHTML=html;
+document.getElementById("noMatch").style.display=has?"none":"block";
+
+// league
+league.sort(function(a,b){return b.PTS-a.PTS;});
+var lt=document.getElementById("leagueTable");
+var lh="<tr><th>#</th><th>Player</th><th>P</th><th>W</th><th>PTS</th></tr>";
+for(var i=0;i<league.length;i++){lh+="<tr><td>"+(i+1)+"</td><td>"+league[i].name+"</td><td>"+league[i].P+"</td><td>"+league[i].W+"</td><td style=color:#facc15;font-weight:900>"+league[i].PTS+"</td></tr>";}
+lt.innerHTML=lh;
+
+// desks
+var ds=document.getElementById("deskStatus");
+var dhtml="";
+for(var i=1;i<=8;i++){var n="Table "+i;dhtml+="<div style=padding:6px;background:#0f172a;margin:4px 0;border-radius:6px;display:flex;justify-content:space-between><span>"+n+"</span><span style=color:"+(desks[n]=="free"?"#22c55e":"#ef4444")+">"+desks[n]+"</span></div>";}
+if(ds){ds.innerHTML=dhtml;}
+save();
+}
 function setLive(i){fixtures[i].status="live";desks[fixtures[i].table]="busy: "+fixtures[i].a+" vs "+fixtures[i].b;render();}
-function award(){var sel=document.getElementById("liveMatch");var idx=sel.value;if(idx===""){alert("Pick match");return;}var fx=fixtures[idx];var w=prompt("Who won? Type exact: "+fx.a+" or "+fx.b,fx.a);if(!w)return;if(w!=fx.a&&w!=fx.b){alert("Type exact name");return;}fx.winner=w;fx.status="done";league.forEach(t=>{if(t.n==fx.a||t.n==fx.b){t.P++;if(t.n==w){t.W++;t.PTS+=3;}}} );desks[fx.table]="free";hist.unshift(new Date().toLocaleTimeString()+" : "+fx.a+" vs "+fx.b+" Winner:"+w+" @"+fx.table);render();var txt="🏆 RESULT - "+fx.a+" vs "+fx.b+" @ "+fx.table+"%0AWinner: *"+w+"*%0A%0Ahttps://sydyatoke-cell.github.io/eballer-online/admin.html";window.open("https://wa.me/?text="+txt,"_blank");}
-function unlockDesk(){var t=document.getElementById("deskSel").value;desks[t]="free";renderDesks();alert(t+" Unlocked - FREE");}
-function post(){var idx=document.getElementById("liveMatch").value;if(idx==="")return;fixtures[idx].status="postponed";renderFix();}
-function disq(){var n=prompt("Player to disqualify?");if(!n)return;if(confirm("Disqualify "+n+"?")){league=league.filter(x=>x.n!=n);fixtures=fixtures.filter(f=>f.a!=n&&f.b!=n);render();}}
-function shareTable(){var txt="🎱 *E-BALLER KISUMU - LEAGUE TABLE* 🏆%0A%0A"+league.map((t,i)=>(i+1)+". "+(i==0?"👑 ":"")+t.n+" - P:"+t.P+" W:"+t.W+" PTS:"+t.PTS).join("%0A")+"%0A%0Ahttps://sydyatoke-cell.github.io/eballer-online/admin.html";window.open("https://wa.me/?text="+txt,"_blank");}
-</script></body></html>
+function unlockDesk(){var t=document.getElementById("unlockSel").value;desks[t]="free";render();}
+function award(i){var fx=fixtures[i];var w=prompt("Who won? "+fx.a+" OR "+fx.b,fx.a);if(!w){return;}if(w!=fx.a && w!=fx.b){alert("Type exact");return;}fx.winner=w;fx.status="done";for(var j=0;j<league.length;j++){if(league[j].name==fx.a||league[j].name==fx.b){league[j].P++;}if(league[j].name==w){league[j].W++;league[j].PTS=league[j].W*3;}else if(league[j].name==fx.a||league[j].name==fx.b){league[j].L++;}}desks[fx.table]="free";render();var txt="🏆 RESULT - "+fx.a+" vs "+fx.b+" @ "+fx.table+"%0AWinner: *"+w+"*%0ATable auto updated & Desk FREE";window.open("https://wa.me/?text="+txt,"_blank");}
+function postpone(i){fixtures[i].status="postponed";desks[fixtures[i].table]="postponed: "+fixtures[i].a+" vs "+fixtures[i].b;render();}
+function rematch(i){fixtures[i].status="pending";fixtures[i].winner="";desks[fixtures[i].table]="busy: "+fixtures[i].a+" vs "+fixtures[i].b;render();}
+function cancelMatch(i){if(confirm("Cancel this match?")){var t=fixtures[i].table;fixtures.splice(i,1);desks[t]="free";render();}}
+function disq(i){var fx=fixtures[i];var who=prompt("Disqualify who? "+fx.a+" OR "+fx.b,fx.a);if(!who){return;}if(confirm("Disqualify "+who+"?")){league=league.filter(function(p){return p.name!=who});fixtures=fixtures.filter(function(f){return f.a!=who && f.b!=who});for(var k in desks){if(desks[k].indexOf(who)!=-1){desks[k]="free";}}render();}}
+function shareTable(){var txt="🎱 *E-BALLER KISUMU TABLE* %0A";for(var i=0;i<league.length;i++){txt+=(i+1)+". "+league[i].name+" PTS:"+league[i].PTS+"%0A";}window.open("https://wa.me/?text="+txt,"_blank");}
+function shareFixtures(){var txt="📋 *FIXTURES AUTO PICKED* %0A";for(var i=0;i<fixtures.length;i++){if(fixtures[i].status!="done"){txt+="• "+fixtures[i].a+" vs "+fixtures[i].b+" @ "+fixtures[i].table+" ["+fixtures[i].status+"]%0A";}}window.open("https://wa.me/?text="+txt,"_blank");}
+render();
+if(fixtures.length==0){autoPick();}
+</script>
+</body>
+</html>
