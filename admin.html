@@ -1,150 +1,67 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>E-Baller Desk Control - Kisumu</title>
+<title>E-Baller Desk Control - Kisumu - FIXED V2</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@800&family=Inter:wght@600&display=swap');
-*{box-sizing:border-box}body{margin:0;background:#060b18;color:#fff;font-family:Inter;padding:6px}
+*{box-sizing:border-box}body{margin:0;background:#060b18;color:#fff;font-family:Inter,sans-serif;padding:6px}
 .hero{background:radial-gradient(600px at 20% 10%,#1e3a8a 0%,#060b18 60%);border:1px solid #1e3a8a;border-radius:16px;padding:10px}
 .logo{font-family:Orbitron;font-size:20px}.logo b{color:#facc15}
 .card{background:#1e293b;padding:10px;border-radius:12px;margin:8px 0}
-.row{display:flex;gap:6px;overflow:auto}
-button{padding:9px 10px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:2px;flex:1}
-.green{background:#22c55e}.blue{background:#3b82f6;color:#fff}.gold{background:#facc15;color:#000}.red{background:#ef4444;color:#fff}.gray{background:#334155;color:#fff}
+button{padding:10px 12px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:3px}
+.green{background:#22c55e;color:#000}.blue{background:#3b82f6;color:#fff}.gold{background:#facc15;color:#000}.red{background:#ef4444;color:#fff}.gray{background:#334155;color:#fff}
 .desk{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.deskBox{padding:10px;border-radius:10px;text-align:center;font-weight:bold}
+.deskBox{padding:12px;border-radius:10px;text-align:center;font-weight:bold;cursor:pointer}
 .free{background:#22c55e;color:#000}.busy{background:#ef4444;color:#fff}.post{background:#f59e0b;color:#000}
 .hrow{display:grid;grid-template-columns:1.4fr 0.3fr 0.3fr 0.3fr 0.4fr 0.4fr 0.5fr;color:#fde68a;font-size:10px;padding:8px;text-align:center;border-bottom:1px solid #ffffff22}
 .mrow{display:grid;grid-template-columns:1.4fr 0.3fr 0.3fr 0.3fr 0.4fr 0.4fr 0.5fr;padding:8px;font-size:11px;text-align:center;border-bottom:1px solid #ffffff11;align-items:center}
-.mrow div:first-child{text-align:left;overflow:hidden;white-space:nowrap}
 .fix{background:#0f172a;padding:8px;border-radius:8px;margin:4px 0;display:flex;justify-content:space-between;align-items:center;font-size:12px;border-left:3px solid #3b82f6}
-.fix.live{border-left-color:#22c55e;animation:blink 1s infinite}
-@keyframes blink{50%{opacity:.6}}
 .hidden{display:none}.small{font-size:10px;color:#94a3b8}
-input,select{width:100%;padding:9px;margin:3px 0;border-radius:8px;border:none}
+input,select{width:100%;padding:10px;margin:4px 0;border-radius:8px;border:none}
+.tab{display:flex;gap:4px;overflow:auto}.tab button{flex:1}
 </style></head><body>
 <div class="hero">
-<div style="display:flex;justify-content:space-between"><div class="logo">🎱 e-<b>BALLER</b> DESK CONTROL</div><div class="small">Loop 0141939000</div></div>
-<div id="loginBox" class="card" style="max-width:340px;margin:8px auto"><input id="pin" type="password" placeholder="Admin PIN 1234"><button class="green" style="width:100%" onclick="unlock()">Unlock Desk Control</button></div>
-
-<div id="main" class="hidden">
-<div class="row"><button class="blue" onclick="show('desks')">Desks</button><button class="gold" onclick="show('table')">Table</button><button class="green" onclick="show('fixtures')">Fixtures</button><button class="gray" onclick="show('control')">Match Control</button></div>
-
-<div id="desksSec">
-<div class="card"><h3 style="margin:0">🎱 8 Desks - Unlock / Lock</h3><div id="desks" class="desk" style="margin-top:8px"></div></div>
+<div style="display:flex;justify-content:space-between"><div class="logo">🎱 e-<b>BALLER</b> DESK CONTROL</div><div class="small">Loop 0141939000 - FIXED</div></div>
+<div id="loginBox" class="card" style="max-width:340px;margin:12px auto;text-align:center">
+<h3>PIN: 1234</h3>
+<input id="pin" type="password" placeholder="Enter 1234">
+<button class="green" style="width:100%" onclick="doUnlock()">Unlock Desk Control</button>
+<div id="msg" class="small"></div>
 </div>
-
-<div id="tableSec" class="hidden">
-<div class="card" style="background:linear-gradient(180deg,#ffffff0d,#0009);border:1px solid #ffffff22">
+<div id="main" class="hidden">
+<div class="tab"><button class="blue" onclick="showSec('desks')">Desks</button><button class="gold" onclick="showSec('table')">Table</button><button class="green" onclick="showSec('fixtures')">Fixtures</button><button class="gray" onclick="showSec('control')">Referee</button></div>
+<div id="desksSec"><div class="card"><h3 style="margin:0">🎱 8 Desks - Tap to Lock/Unlock</h3><div id="desks" class="desk" style="margin-top:8px"></div></div></div>
+<div id="tableSec" class="hidden"><div class="card" style="border:1px solid #ffffff22">
 <h3 style="margin:0;text-align:center;font-family:Orbitron">LEAGUE STANDINGS - AUTO</h3>
 <div class="hrow"><div>👑 PLAYER</div><div>P</div><div>W</div><div>L</div><div>GF</div><div>GA</div><div>PTS</div></div>
 <div id="rows"></div>
-<div style="display:flex;gap:4px;margin-top:8px"><button class="green" onclick="shareWhatsApp()">📲 Share Table to WhatsApp Group</button><button class="blue" onclick="shareFixtures()">📲 Share Fixtures to WhatsApp</button></div>
-</div>
-</div>
-
-<div id="fixturesSec" class="hidden">
-<div class="card"><h3>⚡ Auto Fixtures - Auto Picks Next Matches</h3>
-<div class="row" style="margin-bottom:6px"><button class="blue" onclick="autoPick()">🎲 Auto-Pick Next Round</button><button class="green" onclick="startNext()">▶️ Start Next Fixture</button><button class="gold" onclick="shareFixtures()">Share to WA</button></div>
-<div id="fixtures"></div>
-</div>
-</div>
-
-<div id="controlSec" class="hidden">
-<div class="card"><h3>🎮 Match Control - Referee Only</h3>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-<select id="liveMatch"></select><select id="deskSel"><option>Table 1</option><option>Table 2</option><option>Table 3</option><option>Table 4</option><option>Table 5</option><option>Table 6</option><option>Table 7</option><option>Table 8</option></select>
-</div>
+<div style="display:flex;gap:4px;margin-top:8px"><button class="green" onclick="shareWA('table')">📲 Share Table to WhatsApp</button><button class="blue" onclick="shareWA('fixtures')">📲 Share Fixtures</button></div>
+</div></div>
+<div id="fixturesSec" class="hidden"><div class="card"><h3>⚡ Auto Fixtures</h3>
+<div style="display:flex;gap:4px;margin-bottom:6px"><button class="blue" onclick="autoPick()">🎲 Auto-Pick</button><button class="green" onclick="startNext()">▶️ Start Next</button></div>
+<div id="fixtures"></div></div></div>
+<div id="controlSec" class="hidden"><div class="card"><h3>🎮 Match Control - Referee Only</h3>
+<select id="liveMatch"></select>
+<select id="deskSel"><option>Table 1</option><option>Table 2</option><option>Table 3</option><option>Table 4</option><option>Table 5</option><option>Table 6</option><option>Table 7</option><option>Table 8</option></select>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
 <button class="green" onclick="awardWin()">🏆 Award Winner</button><button class="blue" onclick="unlockDesk()">🔓 Unlock Desk</button>
-<button class="gold" onclick="postpone()">⏸️ Postpone Match</button><button class="gray" onclick="rematch()">🔄 Rematch</button>
-<button class="red" onclick="disqualify()">🚫 Disqualify Player</button><button class="red" onclick="cancelMatch()">❌ Cancel Match</button>
+<button class="gold" onclick="postpone()">⏸️ Postpone</button><button class="gray" onclick="rematch()">🔄 Rematch</button>
+<button class="red" onclick="disqualify()">🚫 Disqualify</button><button class="red" onclick="cancelMatch()">❌ Cancel Match</button>
 </div>
 <div id="controlHist" class="small" style="margin-top:8px"></div>
+</div></div>
 </div>
 </div>
-</div>
-</div>
-
 <script>
-let league=JSON.parse(localStorage.getItem('eballer_league')||'[]');
-let fixtures=JSON.parse(localStorage.getItem('eb_fixtures')||'[]');
-let desks=JSON.parse(localStorage.getItem('eb_desks')||'{"Table 1":"free","Table 2":"free","Table 3":"free","Table 4":"free","Table 5":"free","Table 6":"free","Table 7":"free","Table 8":"free"}');
-let hist=JSON.parse(localStorage.getItem('eb_hist')||'[]');
-
-function init(){
- if(league.length===0){
-  ["Prince Nyaru","Mosalah Jnr","Magnusefb","Stone Of Heaven","Chris Gray","Jah Raze","Ghost","Sydyato"].forEach(n=>league.push({name:n,P:0,W:0,L:0,GF:0,GA:0,GD:0,PTS:0}));
- }
- save();
-}
-function calc(){league.forEach(t=>{t.GD=t.GF-t.GA;t.PTS=t.W*3});league.sort((a,b)=>b.PTS-a.PTS||b.GD-a.GD);}
-function render(){
- calc();
- let html='';league.forEach((t,i)=>{
-  let crown=i===0?'👑':'';
-  html+=`<div class="mrow" style="${i===0?'background:linear-gradient(90deg,#facc15,#eab308);color:#000;font-weight:900':''}"><div>${i+1}. ${crown} ${t.name}</div><div>${t.P}</div><div>${t.W}</div><div>${t.L}</div><div>${t.GF}</div><div>${t.GA}</div><div style="color:#facc15;font-weight:900">${t.PTS}</div></div>`;
- });document.getElementById('rows').innerHTML=html;
- renderDesks(); renderFixtures();
-}
-function renderDesks(){
- let h='';for(let i=1;i<=8;i++){
-  let t='Table '+i; let st=desks[t]||'free'; let cls=st==='free'?'free':st==='busy'?'busy':'post';
-  let txt=st==='free'?'FREE - Click to Lock':st==='busy'?'BUSY - '+st.replace('busy:',''): 'POSTPONED';
-  h+=`<div class="deskBox ${cls}" onclick="toggleDesk('${t}')">${t}<br><span style="font-size:10px">${txt}</span></div>`;
- }document.getElementById('desks').innerHTML=h;
-}
-function toggleDesk(t){
- if(desks[t]==='free'){let m=prompt('Enter match e.g. Otis vs Brian'); if(m){desks[t]='busy:'+m;}}else{desks[t]='free';}
- save();
-}
-function unlockDesk(){
- let t=deskSel.value; desks[t]='free'; save(); alert(t+' Unlocked ✅ Desk free now');
-}
-function renderFixtures(){
- if(fixtures.length===0) autoPick();
- let html=fixtures.map((f,i)=>{
-  let live=f.status==='live'?'fix live':'fix';
-  return `<div class="${live}"><div><b>${f.a} vs ${f.b}</b><br><span class="small">${f.table} - ${f.status.toUpperCase()} ${f.winner?'Winner:'+f.winner:''}</span></div><div><button class="blue" style="padding:4px 6px;font-size:10px" onclick="setLive(${i})">Start</button></div></div>`;
- }).join('');
- document.getElementById('fixtures').innerHTML=html;
- let opts=fixtures.filter(f=>f.status!=='done').map((f,i)=>`<option value="${i}">${f.a} vs ${f.b} @ ${f.table}</option>`).join('');
- document.getElementById('liveMatch').innerHTML=opts||'<option>No live fixtures</option>';
-}
-function autoPick(){
- // Auto Round Robin pick from league - pairs not played
- fixtures=[]; let names=league.map(x=>x.name);
- for(let i=0;i<names.length;i+=2){
-  if(names[i+1]) fixtures.push({a:names[i],b:names[i+1],table:'Table '+( (i/2)%8+1 ),status:'upcoming',winner:''});
- }
- if(fixtures.length===0) fixtures.push({a:names[0],b:names[1],table:'Table 1',status:'upcoming',winner:''});
- save();
-}
-function startNext(){
- let next=fixtures.find(f=>f.status==='upcoming');
- if(!next)return alert('No upcoming'); next.status='live'; desks[next.table]='busy:'+next.a+' vs '+next.b; save(); alert('Started: '+next.a+' vs '+next.b+' on '+next.table);
-}
-function setLive(i){ fixtures[i].status='live'; desks[fixtures[i].table]='busy:'+fixtures[i].a+' vs '+fixtures[i].b; save(); show('control');}
-function awardWin(){
- let idx=liveMatch.value; if(idx==='')return alert('Pick match'); let f=fixtures[idx];
- let winner=prompt('Who won? Type: '+f.a+' OR '+f.b, f.a); if(!winner)return;
- if(![f.a,f.b].includes(winner))return alert('Type exact name');
- f.winner=winner; f.status='done';
- let ta=league.find(x=>x.name===f.a), tb=league.find(x=>x.name===f.b);
- ta.P++; tb.P++;
- if(winner===f.a){ta.W++;tb.L++;ta.GF+=3;tb.GA+=3;}else{tb.W++;ta.L++;tb.GF+=3;ta.GA+=3;}
- desks[f.table]='free'; hist.unshift({a:f.a,b:f.b,winner,time:new Date().toLocaleString(),table:f.table});
- save(); alert('🏆 Winner awarded: '+winner+' | Table auto-updated | Desk '+f.table+' unlocked');
- autoShareResult(f);
-}
-function postpone(){let idx=liveMatch.value; if(idx===''){return} fixtures[idx].status='postponed'; desks[fixtures[idx].table]='postponed'; save(); alert('⏸️ Match postponed');}
-function rematch(){let idx=liveMatch.value; if(idx===''){return} fixtures[idx].status='upcoming'; fixtures[idx].winner=''; save(); alert('🔄 Rematch set');}
-function disqualify(){
- let name=prompt('Player to disqualify?'); if(!name)return;
- if(confirm('Disqualify '+name+' - Remove all his matches & ban?')){
-  league=league.filter(x=>x.name!==name); fixtures=fixtures.filter(f=>f.a!==name&&f.b!==name); save(); alert('🚫 '+name+' disqualified & removed');
- }
-}
-function cancelMatch(){let idx=liveMatch.value; if(idx===''){return} if(confirm('Cancel this match?')){fixtures.splice(idx,1); save();}}
-function save(){localStorage.setItem('eballer_league',JSON.stringify(league));localStorage.setItem('eb_fixtures',JSON.stringify(fixtures));localStorage.setItem('eb_desks',JSON.stringify(desks));localStorage.setItem('eb_hist',JSON.stringify(hist.slice(0,100)));render();renderHist();}
-function renderHist(){document.getElementById('controlHist').innerHTML=hist.map(h=>`${h.time}: ${h.a} vs ${h.b} Winner:${h.winner} @${h.table}`).join('<br>')||'No matches';}
-function show(id){['desks','table','fixtures','control'].forEach(s=>document.getElementById(s+'Sec').classList.add('hidden'));document.getElementById(id+'Sec').classList.remove('hidden');}
-function unlock(){if(pin.value==='1234'){document.getElementById('loginBox').classList.add('hidden');document.getElementById('main').classList.remove('hidden');init();render();}else alert('Wrong
+var league=[{name:"Prince Nyaru",P:0,W:0,L:0,GF:0,GA:0,PTS:0},{name:"Mosalah Jnr",P:0,W:0,L:0,GF:0,GA:0,PTS:0},{name:"Magnusefb",P:0,W:0,L:0,GF:0,GA:0,PTS:0},{name:"Stone Of Heaven",P:0,W:0,L:0,GF:0,GA:0,PTS:0},{name:"Chris Gray",P:0,W:0,L:0,GF:0,GA:0,PTS:0},{name:"Jah Raze",P:0,W:0,L:0,GF:0,GA:0,PTS:0},{name:"Ghost",P:0,W:0,L:0,GF:0,GA:0,PTS:0},{name:"Sydyato",P:0,W:0,L:0,GF:0,GA:0,PTS:0}];
+var fixtures=[];var desks={"Table 1":"free","Table 2":"free","Table 3":"free","Table 4":"free","Table 5":"free","Table 6":"free","Table 7":"free","Table 8":"free"};var hist=[];
+try{var s=localStorage.getItem('eballer_league');if(s){league=JSON.parse(s);}}catch(e){}
+try{var s2=localStorage.getItem('eb_fixtures');if(s2){fixtures=JSON.parse(s2);}}catch(e){}
+try{var s3=localStorage.getItem('eb_desks');if(s3){desks=JSON.parse(s3);}}catch(e){}
+try{var s4=localStorage.getItem('eb_hist');if(s4){hist=JSON.parse(s4);}}catch(e){}
+function doUnlock(){var p=document.getElementById('pin').value;if(p==='1234'){document.getElementById('loginBox').classList.add('hidden');document.getElementById('main').classList.remove('hidden');initAll();}else{document.getElementById('msg').innerText='Wrong PIN, use 1234';}}
+function initAll(){calc();if(fixtures.length===0)autoPick();renderAll();}
+function calc(){league.forEach(function(t){t.PTS=t.W*3;});league.sort(function(a,b){return b.PTS-a.PTS||b.GF-a.GF;});}
+function renderAll(){renderTable();renderDesks();renderFixtures();renderHist();saveAll();}
+function renderTable(){var html='';league.forEach(function(t,i){var style=i===0?'background:linear-gradient(90deg,#facc15,#eab308);color:#000;font-weight:900':'';var crown=i===0?'👑':'';html+='<div class="mrow" style="'+style+'"><div>'+(i+1)+'. '+crown+' '+t.name+'</div><div>'+t.P+'</div><div>'+t.W+'</div><div>'+t.L+'</div><div>'+t.GF+'</div><div>'+t.GA+'</div><div style="font-weight:900;color:#facc15">'+t.PTS+'</div></div>';});document.getElementById('rows').innerHTML=html;}
+function renderDesks(){var h='';for(var i=1;i<=8;i++){var t='Table '+i;var st=desks[t]||'free';var cls=st==='free'?'free':(st.indexOf('busy')===0?'busy':'post');var txt=st==='free'?'FREE':st;h+='<div class="deskBox '+cls+'" onclick="toggleDesk(\''+t+'\')">'+t+'<br><span style="font-size:10px">'+txt+'</span></div>';}document.getElementById('desks').innerHTML=h;}
+function toggleDesk(t){if(desks[t]==='free'){var m=prompt('Enter match e.g. Otis vs Brian');if(m){desks[t]='busy:'+m;}}else{desks[t]='free';}renderDesks();saveAll();}
+function renderFixtures(){var html='';fixtures.forEach(function(f,i){html+='<div class="fix"><div><b>'+f.a+' vs '+f.b+'</b><br><span class="small">'+f.table+' - '+f.status.toUpperCase()+' '+(f.winner?'Winner:'+f.winner:'')+'</span></div><div><button class="blue" style="padding:4px" onclick="setLive('+i+')">Start</button></div></div>';});document.getElementById('fixtures').innerHTML=html;var opts='';fixtures.forEach(function(f,i){if(f.status!=='done'){opts+='<option value="'+i+'">'+f.a+'
