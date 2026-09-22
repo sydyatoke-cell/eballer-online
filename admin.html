@@ -1,1 +1,138 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin</title><style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}body{background:#0a0a0a;color:#fff}.h{background:#1a1515;padding:15px;border-bottom:2px solid #ff4444}.c{max-width:600px;margin:15px auto;padding:12px}.card{background:#1c1a1a;border-radius:12px;padding:15px;margin-bottom:15px;border:1px solid #333}.i{width:100%;padding:12px;background:#0f0f0f;border:1px solid #333;border-radius:8px;color:#fff;margin:6px 0}.btn{padding:12px 20px;border:none;border-radius:8px;font-weight:800;cursor:pointer}.g{background:#00ff88;color:#000}.item{background:#151515;padding:12px;border-radius:10px;margin:8px 0;display:flex;justify-content:space-between;border-left:4px solid #ffa500}</style></head><body><div class="h"><b style="color:#ff4444">EBALLER ADMIN - LOOP 0141939000</b></div><div class="c"><div class="card"><input class="i" type="password" id="pin" placeholder="PIN 1234"><button class="btn g" style="width:100%" onclick="login()">LOGIN</button><div id="bStatus" style="margin-top:8px;font-size:12px;color:#888"></div></div><div id="desk" style="display:none"><div class="card"><h3>Pending - Verify in Loop App</h3><div id="pend"></div><button class="btn" style="background:#222;color:#fff;width:100%;margin-top:10px" onclick="load()">Refresh</button></div></div></div><script>const BACKEND="https://eballer-backend.onrender.com";function login(){if(document.getElementById('pin').value!=='1234')return alert('PIN 1234');document.getElementById('desk').style.display='block';load();}async function load(){document.getElementById('bStatus').innerText='Loading '+BACKEND+'...';try{let r=await fetch(BACKEND+'/api/deposits');let deps=await r.json();let pend=deps.filter(d=>d.status==='PENDING');document.getElementById('bStatus').innerText='Backend OK - '+deps.length+' deposits';document.getElementById('pend').innerHTML=pend.map(d=>`<div class="item"><div><b>${d.amount} KES</b><br><small>${d.phone}<br>${d.mpesaCode}<br>${d.time}</small></div><button class="btn g" onclick="approve('${d.id}')">UNLOCK</button></div>`).join('')||'No pending';}catch(e){document.getElementById('bStatus').innerText='Cannot reach backend - check Render URL';}}async function approve(id){if(!confirm('Saw in Loop 0141939000? Unlock?'))return;await fetch(BACKEND+'/api/approve/'+id,{method:'POST'});alert('Unlocked!');load();}</script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>E-Baller Admin</title>
+<style>
+body{font-family:sans-serif;background:#0f172a;color:#fff;padding:12px;margin:0}
+.card{background:#1e293b;padding:12px;border-radius:12px;margin-bottom:12px}
+button{background:#22c55e;color:#000;padding:8px 12px;border:none;border-radius:8px;font-weight:bold;margin:4px}
+input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:none}
+.danger{background:#ef4444;color:#fff}
+.blue{background:#3b82f6;color:#fff}
+.tab{display:flex;gap:6px;overflow:auto}
+.tab button{background:#334155;color:#fff}
+.tab button.active{background:#fff;color:#000}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<h2>E-Baller Admin - Kisumu</h2>
+<div id="login" class="card">
+<input id="pin" type="password" placeholder="Enter PIN 1234">
+<button onclick="login()">Unlock Admin</button>
+</div>
+
+<div id="panel" class="hidden">
+<div class="tab">
+<button id="t1" class="active" onclick="showTab('fixtures')">Fixtures</button>
+<button id="t2" onclick="showTab('unlock')">Unlock Desk</button>
+<button id="t3" onclick="showTab('players')">Remove Player</button>
+<button id="t4" onclick="showTab('matches')">Disqualify Match</button>
+</div>
+
+<div id="fixtures" class="card">
+<h3>Create Fixture</h3>
+<input id="p1" placeholder="Player 1 Name / Phone">
+<input id="p2" placeholder="Player 2 Name / Phone">
+<select id="table">
+<option>Table 1</option><option>Table 2</option><option>Table 3</option><option>Table 4</option>
+<option>Table 5</option><option>Table 6</option><option>Table 7</option><option>Table 8</option>
+</select>
+<input id="fee" type="number" placeholder="Fee e.g. 50">
+<button onclick="createFixture()">Create Fixture & Lock Table</button>
+<div id="fixList"></div>
+</div>
+
+<div id="unlock" class="card hidden">
+<h3>Unlock Desk - Loop 0141939000 Deposits</h3>
+<button class="blue" onclick="loadDeposits()">Refresh Deposits</button>
+<div id="depList">No deposits yet. Tap Refresh.</div>
+</div>
+
+<div id="players" class="card hidden">
+<h3>Remove a Player</h3>
+<input id="removeName" placeholder="Enter Player Phone or Name to Remove">
+<button class="danger" onclick="removePlayer()">Remove Player</button>
+<div id="playerList"></div>
+</div>
+
+<div id="matches" class="card hidden">
+<h3>Disqualify Match / End Match</h3>
+<input id="matchId" placeholder="Match ID or Table Number">
+<select id="reason">
+<option>No Show</option><option>Cheating</option><option>Fight</option><option>Double Booking</option>
+</select>
+<button class="danger" onclick="disqualify()">Disqualify / Cancel Match</button>
+<button class="blue" onclick="completeMatch()">Mark as Completed</button>
+<div id="matchList"></div>
+</div>
+
+<button class="danger" onclick="location.reload()">Logout</button>
+</div>
+
+<script>
+const BACKEND="https://eballer-backend.onrender.com";
+function login(){
+ if(document.getElementById('pin').value==='1234'){
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('panel').classList.remove('hidden');
+  loadAll();
+ } else alert('Wrong PIN');
+}
+function showTab(t){
+ document.querySelectorAll('#fixtures,#unlock,#players,#matches').forEach(e=>e.classList.add('hidden'));
+ document.getElementById(t).classList.remove('hidden');
+ document.querySelectorAll('.tab button').forEach(b=>b.classList.remove('active'));
+ document.getElementById('t'+(t==='fixtures'?1:t==='unlock'?2:t==='players'?3:4)).classList.add('active');
+}
+let fixtures=JSON.parse(localStorage.getItem('fixtures')||'[]');
+function createFixture(){
+ let f={id:Date.now(),p1:p1.value,p2:p2.value,table:table.value,fee:fee.value,status:'locked'};
+ fixtures.push(f); localStorage.setItem('fixtures',JSON.stringify(fixtures));
+ alert('Fixture Created: '+f.table+' Locked');
+ p1.value='';p2.value=''; renderFixtures();
+ // optional send to backend
+ fetch(BACKEND+'/api/fixtures',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(f)}).catch(()=>{});
+}
+function renderFixtures(){
+ fixList.innerHTML=fixtures.map(f=>`<div class="card" style="background:#334155">${f.table}: ${f.p1} vs ${f.p2} - ${f.status} <button class="blue" onclick="unlockTable(${f.id})">Unlock</button></div>`).join('');
+}
+function unlockTable(id){
+ fixtures=fixtures.map(f=>f.id===id?{...f,status:'unlocked'}:f);
+ localStorage.setItem('fixtures',JSON.stringify(fixtures)); renderFixtures();
+}
+function loadDeposits(){
+ depList.innerHTML='Loading Loop 0141939000...';
+ fetch(BACKEND+'/api/deposits').then(r=>r.json()).then(data=>{
+   depList.innerHTML=data.map(d=>`<div class="card" style="background:#334155">${d.phone} - KES ${d.amount} <button onclick="confirmUnlock('${d.phone}')">UNLOCK ${d.table||''}</button></div>`).join('')||'No new deposits';
+ }).catch(()=>{ depList.innerHTML='<div>Backend offline. Using local demo:<br><div class="card" style="background:#334155">0712345678 - KES 50 <button onclick="alert(\'Unlocked Demo Table 1\')")>UNLOCK Table 1</button></div></div>'; });
+}
+function confirmUnlock(phone){
+ if(confirm('Unlock table for '+phone+'?')){ alert('Unlocked for '+phone); fetch(BACKEND+'/api/unlock',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone})}); }
+}
+function removePlayer(){
+ let n=removeName.value; if(!n)return alert('Enter name');
+ fixtures=fixtures.filter(f=>f.p1!==n && f.p2!==n);
+ localStorage.setItem('fixtures',JSON.stringify(fixtures));
+ alert('Removed '+n); renderFixtures(); loadPlayers();
+}
+function loadPlayers(){
+ let names=[...new Set(fixtures.flatMap(f=>[f.p1,f.p2]))];
+ playerList.innerHTML=names.map(n=>`<div>${n} <button class="danger" onclick="removeName.value='${n}';removePlayer()">X Remove</button></div>`).join('');
+}
+function disqualify(){
+ let id=matchId.value; if(!id)return alert('Enter Table/Match');
+ fixtures=fixtures.map(f=>f.table===id||String(f.id)===id?{...f,status:'disqualified - '+reason.value}:f);
+ localStorage.setItem('fixtures',JSON.stringify(fixtures));
+ alert('Disqualified '+id); renderFixtures();
+}
+function completeMatch(){
+ let id=matchId.value; fixtures=fixtures.map(f=>f.table===id||String(f.id)===id?{...f,status:'completed'}:f);
+ localStorage.setItem('fixtures',JSON.stringify(fixtures)); alert('Match Completed '+id); renderFixtures();
+}
+function loadAll(){ renderFixtures(); loadPlayers(); }
+</script>
+</body>
+</html>
