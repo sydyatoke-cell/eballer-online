@@ -1,32 +1,206 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E-Baller Admin - Kisumu</title><style>body{margin:0;background:#0f172a;color:#fff;font-family:system-ui}.h{padding:14px 12px;font-weight:900;font-size:18px}.tabs{display:flex;gap:6px;padding:8px 12px;overflow:auto}.tabs button{padding:8px 12px;border:0;border-radius:8px;font-weight:700;font-size:12px;background:#334155;color:#fff;white-space:nowrap}.tabs button.a{background:#fff;color:#000}.card{background:#1e293b;margin:10px;border-radius:12px;padding:12px}.inp{width:100%;padding:12px;border:0;border-radius:8px;margin:6px 0;box-sizing:border-box}.btn{padding:10px 14px;border:0;border-radius:8px;font-weight:900;font-size:12px}.g{background:#22c55e;color:#000}.r{background:#ef4444;color:#fff}.bl{background:#3b82f6;color:#fff}.tb{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}.tb th{background:#37003c;color:#fff;padding:8px}.tb td{background:#fff;color:#000;padding:8px;border-bottom:1px solid #ddd;text-align:center}.hi{display:none}.logout{background:#ef4444;color:#fff;border:0;padding:8px 12px;border-radius:8px;margin:10px;font-weight:800}</style></head><body>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>E-Baller Admin - Kisumu</title>
+<style>
+body{margin:0;background:#0f172a;color:#fff;font-family:system-ui}
+.h{padding:14px 12px;font-weight:900;font-size:18px}
+.tabs{display:flex;gap:6px;padding:8px;overflow:auto}
+.tabs button{padding:8px 12px;border:0;border-radius:8px;font-weight:700;font-size:12px;background:#334155;color:#fff}
+.tabs button.a{background:#fff;color:#000}
+.card{background:#1e293b;margin:10px;border-radius:12px;padding:12px}
+.inp{width:100%;padding:12px;border:0;border-radius:8px;margin:6px 0;box-sizing:border-box}
+.btn{padding:10px 14px;border:0;border-radius:8px;font-weight:900;font-size:12px}
+.g{background:#22c55e;color:#000}
+.r{background:#ef4444;color:#fff}
+.bl{background:#3b82f6;color:#fff}
+.tb{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.tb th{background:#37003c;color:#fff;padding:8px}
+.tb td{background:#fff;color:#000;padding:8px;border-bottom:1px solid #ddd;text-align:center}
+.hi{display:none}
+.logout{background:#ef4444;color:#fff;border:0;padding:8px 12px;border-radius:8px;margin:10px;font-weight:800}
+</style>
+</head>
+<body>
 <div class=h>E-Baller Admin - Kisumu</div>
-<div class=tabs><button id=btF class=a onclick="showTab('tabF')">Fixtures</button><button id=btU onclick="showTab('tabU')">Unlock Desk</button><button id=btR onclick="showTab('tabR')">Remove Player</button><button id=btD onclick="showTab('tabD')">Disqualify Match</button><button id=btL onclick="showTab('tabL')">Table</button></div>
+<div class=tabs>
+<button id=btF class=a onclick="showTab('tabF')">Fixtures</button>
+<button id=btU onclick="showTab('tabU')">Unlock Desk</button>
+<button id=btR onclick="showTab('tabR')">Remove Player</button>
+<button id=btD onclick="showTab('tabD')">Disqualify Match</button>
+<button id=btL onclick="showTab('tabL')">Table</button>
+</div>
 
-<div id=tabF><div class=card><b>Create Fixture</b><input id=p1 class=inp placeholder="Player 1 Name / Phone"><input id=p2 class=inp placeholder="Player 2 Name / Phone"><select id=tbS class=inp><option>Table 1</option><option>Table 2</option><option>Table 3</option><option>Table 4</option><option>Table 5</option><option>Table 6</option><option>Table 7</option><option>Table 8</option></select><input id=fee class=inp placeholder="Fee e.g. 50" value="50"><button class="btn g" onclick="CF()">Create Fixture & Lock Table</button><div id=fl style="margin-top:10px"></div></div></div>
+<div id=tabF>
+<div class=card>
+<b>Create Fixture</b>
+<input id=p1 class=inp placeholder="Player 1 Name / Phone">
+<input id=p2 class=inp placeholder="Player 2 Name / Phone">
+<select id=tbS class=inp>
+<option>Table 1</option><option>Table 2</option>
+<option>Table 3</option><option>Table 4</option>
+<option>Table 5</option><option>Table 6</option>
+<option>Table 7</option><option>Table 8</option>
+</select>
+<input id=fee class=inp placeholder="Fee e.g. 50" value="50">
+<button class="btn g" onclick="CF()">Create Fixture & Lock Table</button>
+<div id=fl style="margin-top:10px"></div>
+</div>
+</div>
 
-<div id=tabU class=hi><div class=card><b style="color:#facc15">💰 APPROVE 50 KES - Paybill 714777 Acc 0141939000</b><div id=dl></div></div><div class=card><b>🎱 DESKS</b><br><select id=us class=inp style="width:auto;display:inline-block"><option>Table 1</option><option>Table 2</option><option>Table 3</option><option>Table 4</option><option>Table 5</option><option>Table 6</option><option>Table 7</option><option>Table 8</option></select><button class="btn bl" onclick="U()">Unlock</button><button class="btn g" onclick="UA()">Unlock All</button><div id=ds style="margin-top:8px"></div></div><div class=card><b>🔄 CHANGE ROOM</b><table class=tb id=rt></table></div></div>
+<div id=tabU class=hi>
+<div class=card>
+<b style="color:#facc15">APPROVE 50 KES - Paybill 714777 Acc 0141939000</b>
+<div id=dl></div>
+</div>
+<div class=card>
+<b>DESKS</b><br>
+<select id=us class=inp style="width:auto;display:inline-block">
+<option>Table 1</option><option>Table 2</option>
+<option>Table 3</option><option>Table 4</option>
+<option>Table 5</option><option>Table 6</option>
+<option>Table 7</option><option>Table 8</option>
+</select>
+<button class="btn bl" onclick="U()">Unlock</button>
+<button class="btn g" onclick="UA()">Unlock All</button>
+<div id=ds style="margin-top:8px"></div>
+</div>
+<div class=card>
+<b>CHANGE ROOM</b>
+<table class=tb id=rt></table>
+</div>
+</div>
 
-<div id=tabR class=hi><div class=card><b>Remove Player</b><table class=tb id=rm></table></div></div>
+<div id=tabR class=hi>
+<div class=card><b>Remove Player</b><table class=tb id=rm></table></div>
+</div>
 
-<div id=tabD class=hi><div class=card><b>Disqualify Match</b><table class=tb id=dq></table></div></div>
+<div id=tabD class=hi>
+<div class=card><b>Disqualify Match</b><table class=tb id=dq></table></div>
+</div>
 
-<div id=tabL class=hi><div class=card style="background:#fff;padding:0;overflow:hidden"><div style="background:#37003c;padding:10px;font-weight:900">EPL Table - Paid Only 50 KES <span id=c style="float:right;background:#00ff87;color:#000;padding:2px 6px;border-radius:6px">0/32</span></div><table class=tb id=lt></table></div></div>
+<div id=tabL class=hi>
+<div class=card style="background:#fff;padding:0;overflow:hidden">
+<div style="background:#37003c;padding:10px;font-weight:900">
+EPL Table - Paid Only 50 KES <span id=c style="float:right;background:#00ff87;color:#000;padding:2px 6px;border-radius:6px">0/32</span>
+</div>
+<table class=tb id=lt></table>
+</div>
+</div>
 
 <button class=logout onclick="location.href='index.html'">Logout</button>
 
 <script>
-var L=[],F=[],D=[],K={};try{L=JSON.parse(localStorage.getItem("eballer_league32")||"[]")}catch(e){}try{F=JSON.parse(localStorage.getItem("eb_fixtures32")||"[]")}catch(e){}try{D=JSON.parse(localStorage.getItem("eb_deposits")||"[]")}catch(e){}try{K=JSON.parse(localStorage.getItem("eb_desks32")||"{}")}catch(e){}
-for(var i=1;i<=8;i++)if(!K["Table "+i])K["Table "+i]="free";
-function SV(){localStorage.setItem("eb_fixtures32",JSON.stringify(F));localStorage.setItem("eballer_league32",JSON.stringify(L));localStorage.setItem("eb_deposits",JSON.stringify(D));localStorage.setItem("eb_desks32",JSON.stringify(K))}
-function showTab(a){var ids=["tabF","tabU","tabR","tabD","tabL"];for(var i=0;i<ids.length;i++){document.getElementById(ids[i]).style.display=ids[i]==a?"":"none"}var bids=["btF","btU","btR","btD","btL"];for(var j=0;j<bids.length;j++){document.getElementById(bids[j]).className=( "tab"+bids[j].slice(2) == a )?"a":""}R()}
-function R(){var fl="";for(var i=0;i<F.length;i++){fl+="<div style='background:#0f172a;padding:8px;margin:6px 0;border-radius:8px;display:flex;justify-content:space-between'><div><b>"+F[i].a+" vs "+F[i].b+"</b><br><small>"+F[i].table+" - "+F[i].fee+"KES - "+F[i].status+"</small></div><div>"+(F[i].status=="pending"?"<button class='btn bl' onclick='SL("+i+")'>START</button>":F[i].status=="live"?"<button class='btn g' onclick='AW("+i+")'>RESULT</button>":"<span style='color:#22c55e;font-weight:900'>COMPLETE</span>")+"</div></div>"}document.getElementById("fl").innerHTML=fl||"<small style=color:#888>No fixtures yet</small>";var h="";if(D.length==0)h="<p style=color:#888>No payments</p>";for(var i=0;i<D.length;i++){var x=D[i];h+="<div style='background:#0f172a;padding:8px;margin:6px 0;border-radius:8px;display:flex;justify-content:space-between'><div><b>"+x.name+"</b><br><small>"+x.code+" "+x.status+"</small></div><div>"+(x.status=="PENDING"?"<button class='btn g' onclick='A("+i+")'>APPROVE 50</button>":"✅")+"</div></div>"}document.getElementById("dl").innerHTML=h;var dh="";for(var j=1;j<=8;j++){var n="Table "+j;dh+="<div style='background:#0f172a;padding:6px;margin:4px 0;border-left:4px solid "+(K[n]=="free"?"#22c55e":"#ef4444")+"'>"+n+": "+K[n]+"</div>"}document.getElementById("ds").innerHTML=dh;var rh="<tr><th>Match</th><th>Now</th><th>Move</th></tr>";for(var k=0;k<F.length;k++){if(F[k].status=="complete")continue;rh+="<tr><td>"+F[k].a+" vs "+F[k].b+"</td><td>"+F[k].table+"</td><td><select onchange='CR("+k+",this.value)'><option>"+F[k].table+"</option><option>Table 1</option><option>Table 2</option><option>Table 3</option><option>Table 4</option><option>Table 5</option><option>Table 6</option><option>Table 7</option><option>Table 8</option></select></td></tr>"}document.getElementById("rt").innerHTML=rh;var rmh="<tr><th>Player</th><th>Action</th></tr>";for(var m=0;m<L.length;m++)rmh+="<tr><td style=text-align:left>"+L[m].name+"</td><td><button class='btn r' onclick='RP("+m+")'>Remove</button></td></tr>";document.getElementById("rm").innerHTML=rmh;var dqh="<tr><th>Match</th><th>Action</th></tr>";for(var n=0;n<F.length;n++)dqh+="<tr><td>"+F[n].a+" vs "+F[n].b+"<br><small>"+F[n].table+"</small></td><td><button class='btn r' onclick='DQ("+n+")'>Disqualify</button></td></tr>";document.getElementById("dq").innerHTML=dqh;L.sort(function(a,b){return b.PTS-a.PTS});var lh="<tr><th>#</th><th>Club</th><th>MP</th><th>W</th><th>Pts</th></tr>";for(var o=0;o<L.length;o++)lh+="<tr><td>"+(o+1)+"</td><td style=text-align:left>"+L[o].name+"</td><td>"+L[o].P+"</td><td>"+L[o].W+"</td><td>"+L[o].PTS+"</td></tr>";document.getElementById("lt").innerHTML=lh;document.getElementById("c").innerText=L.length+"/32";SV()}
-function CF(){var a=document.getElementById("p1").value.trim(),b=document.getElementById("p2").value.trim(),t=document.getElementById("tbS").value,fv=document.getElementById("fee").value||"50";if(!a||!b){alert("Enter players");return}if(K[t]!="free"){alert(t+" busy: "+K[t]);return}F.push({a:a,b:b,table:t,fee:fv,status:"pending",winner:""});K[t]="busy "+a+" vs "+b;document.getElementById("p1").value="";document.getElementById("p2").value="";SV();R();alert("Fixture locked "+t)}
-function A(i){var x=D[i];x.status="APPROVED";if(!L.some(function(z){return z.name==x.name}))L.push({name:x.name,P:0,W:0,L:0,PTS:0});SV();R()}
-function U(){K[document.getElementById("us").value]="free";SV();R()}function UA(){for(var i=1;i<=8;i++)K["Table "+i]="free";SV();R()}
-function CR(i,n){var o=F[i].table;F[i].table=n;K[o]="free";K[n]="busy "+F[i].a+" vs "+F[i].b;SV();R()}
-function SL(i){F[i].status="live";SV();R()}function AW(i){var w=prompt("Winner? "+F[i].a+" or "+F[i].b,F[i].a);if(!w)return;F[i].winner=w;F[i].status="complete";for(var j=0;j<L.length;j++){if(L[j].name==F[i].a||L[j].name==F[i].b)L[j].P++;if(L[j].name==w){L[j].W++;L[j].PTS=L[j].W*3}}K[F[i].table]="free";SV();R()}
-function RP(i){if(confirm("Remove "+L[i].name+"?")){L.splice(i,1);SV();R()}}
-function DQ(i){if(confirm("Disqualify "+F[i].a+" vs "+F[i].b+"?")){K[F[i].table]="free";F.splice(i,1);SV();R()}}
+var L=[],F=[],D=[],K={};
+try{L=JSON.parse(localStorage.getItem("eballer_league32")||"[]")}catch(e){}
+try{F=JSON.parse(localStorage.getItem("eb_fixtures32")||"[]")}catch(e){}
+try{D=JSON.parse(localStorage.getItem("eb_deposits")||"[]")}catch(e){}
+try{K=JSON.parse(localStorage.getItem("eb_desks32")||"{}")}catch(e){}
+for(var i=1;i<=8;i++){if(!K["Table "+i])K["Table "+i]="free";}
+function SV(){
+localStorage.setItem("eb_fixtures32",JSON.stringify(F));
+localStorage.setItem("eballer_league32",JSON.stringify(L));
+localStorage.setItem("eb_deposits",JSON.stringify(D));
+localStorage.setItem("eb_desks32",JSON.stringify(K));
+}
+function showTab(a){
+var ids=["tabF","tabU","tabR","tabD","tabL"];
+for(var i=0;i<ids.length;i++){
+document.getElementById(ids[i]).style.display=ids[i]==a?"":"none";
+}
+var bids=["btF","btU","btR","btD","btL"];
+for(var j=0;j<bids.length;j++){
+var btn=document.getElementById(bids[j]);
+var tabName="tab"+bids[j].slice(2);
+btn.className=(tabName==a)?"a":"";
+}
+R();
+}
+function R(){
+var fl="";
+for(var i=0;i<F.length;i++){
+fl+="<div style='background:#0f172a;padding:8px;margin:6px 0;border-radius:8px;display:flex;justify-content:space-between'><div><b>"+F[i].a+" vs "+F[i].b+"</b><br><small>"+F[i].table+" - "+F[i].fee+"KES - "+F[i].status+"</small></div><div>"+(F[i].status=="pending"?"<button class='btn bl' onclick='SL("+i+")'>START</button>":F[i].status=="live"?"<button class='btn g' onclick='AW("+i+")'>RESULT</button>":"<span style='color:#22c55e;font-weight:900'>COMPLETE</span>")+"</div></div>";
+}
+document.getElementById("fl").innerHTML=fl||"<small style=color:#888>No fixtures</small>";
+var h="";
+if(D.length==0){h="<p style=color:#888>No payments</p>";}
+for(var i=0;i<D.length;i++){
+var x=D[i];
+h+="<div style='background:#0f172a;padding:8px;margin:6px 0;border-radius:8px;display:flex;justify-content:space-between'><div><b>"+x.name+"</b><br><small>"+x.code+" "+x.status+"</small></div><div>"+(x.status=="PENDING"?"<button class='btn g' onclick='A("+i+")'>APPROVE 50</button>":"✅")+"</div></div>";
+}
+document.getElementById("dl").innerHTML=h;
+var dh="";
+for(var j=1;j<=8;j++){
+var n="Table "+j;
+dh+="<div style='background:#0f172a;padding:6px;margin:4px 0;border-left:4px solid "+(K[n]=="free"?"#22c55e":"#ef4444")+"'>"+n+": "+K[n]+"</div>";
+}
+document.getElementById("ds").innerHTML=dh;
+var rh="<tr><th>Match</th><th>Now</th><th>Move</th></tr>";
+for(var k=0;k<F.length;k++){
+if(F[k].status=="complete")continue;
+rh+="<tr><td>"+F[k].a+" vs "+F[k].b+"</td><td>"+F[k].table+"</td><td><select onchange='CR("+k+",this.value)'><option>"+F[k].table+"</option><option>Table 1</option><option>Table 2</option><option>Table 3</option><option>Table 4</option><option>Table 5</option><option>Table 6</option><option>Table 7</option><option>Table 8</option></select></td></tr>";
+}
+document.getElementById("rt").innerHTML=rh;
+var rmh="<tr><th>Player</th><th>Action</th></tr>";
+for(var m=0;m<L.length;m++){
+rmh+="<tr><td style=text-align:left>"+L[m].name+"</td><td><button class='btn r' onclick='RP("+m+")'>Remove</button></td></tr>";
+}
+document.getElementById("rm").innerHTML=rmh;
+var dqh="<tr><th>Match</th><th>Action</th></tr>";
+for(var n=0;n<F.length;n++){
+dqh+="<tr><td>"+F[n].a+" vs "+F[n].b+"<br><small>"+F[n].table+"</small></td><td><button class='btn r' onclick='DQ("+n+")'>Disqualify</button></td></tr>";
+}
+document.getElementById("dq").innerHTML=dqh;
+L.sort(function(a,b){return b.PTS-a.PTS});
+var lh="<tr><th>#</th><th>Club</th><th>MP</th><th>W</th><th>Pts</th></tr>";
+for(var o=0;o<L.length;o++){
+lh+="<tr><td>"+(o+1)+"</td><td style=text-align:left>"+L[o].name+"</td><td>"+L[o].P+"</td><td>"+L[o].W+"</td><td>"+L[o].PTS+"</td></tr>";
+}
+document.getElementById("lt").innerHTML=lh;
+document.getElementById("c").innerText=L.length+"/32";
+SV();
+}
+function CF(){
+var a=document.getElementById("p1").value.trim();
+var b=document.getElementById("p2").value.trim();
+var t=document.getElementById("tbS").value;
+var fv=document.getElementById("fee").value||"50";
+if(!a||!b){alert("Enter players");return;}
+if(K[t]!="free"){alert(t+" busy: "+K[t]);return;}
+F.push({a:a,b:b,table:t,fee:fv,status:"pending",winner:""});
+K[t]="busy "+a+" vs "+b;
+document.getElementById("p1").value="";
+document.getElementById("p2").value="";
+SV();R();alert("Fixture locked "+t);
+}
+function A(i){
+var x=D[i];x.status="APPROVED";
+if(!L.some(function(z){return z.name==x.name})){
+L.push({name:x.name,P:0,W:0,L:0,PTS:0});
+}
+SV();R();
+}
+function U(){K[document.getElementById("us").value]="free";SV();R();}
+function UA(){for(var i=1;i<=8;i++){K["Table "+i]="free";}SV();R();}
+function CR(i,n){
+var o=F[i].table;F[i].table=n;K[o]="free";K[n]="busy "+F[i].a+" vs "+F[i].b;SV();R();
+}
+function SL(i){F[i].status="live";SV();R();}
+function AW(i){
+var w=prompt("Winner? "+F[i].a+" or "+F[i].b,F[i].a);
+if(!w)return;
+F[i].winner=w;F[i].status="complete";
+for(var j=0;j<L.length;j++){
+if(L[j].name==F[i].a||L[j].name==F[i].b){L[j].P++;}
+if(L[j].name==w){L[j].W++;L[j].PTS=L[j].W*3;}
+}
+K[F[i].table]="free";SV();R();
+}
+function RP(i){if(confirm("Remove "+L[i].name+"?")){L.splice(i,1);SV();R();}}
+function DQ(i){if(confirm("Disqualify "+F[i].a+" vs "+F[i].b+"?")){K[F[i].table]="free";F.splice(i,1);SV();R();}}
 R();
 </script>
-</body></html>
+</body>
+</html>
