@@ -1,49 +1,150 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>E-Baller League Standings</title>
+<title>E-Baller Desk Control - Kisumu</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@800&family=Inter:wght@600;800&display=swap');
-*{box-sizing:border-box}body{margin:0;background:#060b18;color:#fff;font-family:Inter,sans-serif;min-height:100vh;padding:8px}
-.hero{position:relative;border-radius:18px;overflow:hidden;background:radial-gradient(600px 300px at 20% 10%,#1e3a8a 0%,#060b18 60%),radial-gradient(500px 300px at 90% 0%,#0a2a6b 0%,#000 70%);border:1px solid #1e3a8a;padding:10px 12px 0 12px}
-.logo{font-family:Orbitron;font-size:28px;font-weight:800}.logo span.e{color:#ffeb3b;background:#0a1a4a;border-radius:50%;padding:2px 8px;margin-right:2px}
-.title{font-family:Orbitron;font-size:32px;line-height:0.9;text-align:center;margin:6px 0;font-weight:800;background:linear-gradient(#fff,#94a3b8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.sub{font-family:Orbitron;text-align:center;color:#38bdf8;font-size:14px;margin:10px 0 12px 0;letter-spacing:2px;text-shadow:0 0 10px #38bdf8}
-.table-wrap{background:linear-gradient(180deg,rgba(255,255,255,0.07),rgba(0,0,0,0.6));border:1px solid #ffffff22;border-radius:14px;overflow:hidden}
-.header-row{display:grid;grid-template-columns:1.8fr 0.4fr 0.4fr 0.4fr 0.4fr 0.6fr 0.6fr 0.6fr 0.6fr;color:#fde68a;font-size:12px;padding:10px;border-bottom:1px solid #ffffff22;text-align:center}
-.header-row div:first-child{text-align:left}
-.row{display:grid;grid-template-columns:1.8fr 0.4fr 0.4fr 0.4fr 0.4fr 0.6fr 0.6fr 0.6fr 0.6fr;padding:10px;align-items:center;border-bottom:1px solid #ffffff11;font-size:14px;text-align:center}
-.row div:first-child{text-align:left;display:flex;gap:6px;overflow:hidden}
-.rank{width:28px;font-weight:800;color:#94a3b8}
-.leader{background:linear-gradient(90deg,#facc15,#eab308);color:#000;font-weight:900;box-shadow:0 0 18px #facc15aa}
-.leader.rank,.leader div{color:#000!important}
-.pos2-3{background:linear-gradient(90deg,#0ea5e922,#1e40af44);border-left:3px solid #38bdf8}
-.mid{background:linear-gradient(90deg,#111827,#1f2937)}
-.low{background:linear-gradient(90deg,#3f0a0a,#7f1d1d);color:#fecaca}
-.pts{color:#facc15;font-weight:900;font-size:16px}
-.pin-card{background:#1e293b;padding:12px;border-radius:12px;margin:10px 0}
-input,select{width:100%;padding:10px;margin:4px 0;border-radius:8px;border:none}
-button{padding:10px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:3px}
-.blue{background:#3b82f6;color:#fff}.green{background:#22c55e}.danger{background:#ef4444;color:#fff}.hidden{display:none}.small{font-size:11px;color:#94a3b8}
-.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@800&family=Inter:wght@600&display=swap');
+*{box-sizing:border-box}body{margin:0;background:#060b18;color:#fff;font-family:Inter;padding:6px}
+.hero{background:radial-gradient(600px at 20% 10%,#1e3a8a 0%,#060b18 60%);border:1px solid #1e3a8a;border-radius:16px;padding:10px}
+.logo{font-family:Orbitron;font-size:20px}.logo b{color:#facc15}
+.card{background:#1e293b;padding:10px;border-radius:12px;margin:8px 0}
+.row{display:flex;gap:6px;overflow:auto}
+button{padding:9px 10px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:2px;flex:1}
+.green{background:#22c55e}.blue{background:#3b82f6;color:#fff}.gold{background:#facc15;color:#000}.red{background:#ef4444;color:#fff}.gray{background:#334155;color:#fff}
+.desk{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.deskBox{padding:10px;border-radius:10px;text-align:center;font-weight:bold}
+.free{background:#22c55e;color:#000}.busy{background:#ef4444;color:#fff}.post{background:#f59e0b;color:#000}
+.hrow{display:grid;grid-template-columns:1.4fr 0.3fr 0.3fr 0.3fr 0.4fr 0.4fr 0.5fr;color:#fde68a;font-size:10px;padding:8px;text-align:center;border-bottom:1px solid #ffffff22}
+.mrow{display:grid;grid-template-columns:1.4fr 0.3fr 0.3fr 0.3fr 0.4fr 0.4fr 0.5fr;padding:8px;font-size:11px;text-align:center;border-bottom:1px solid #ffffff11;align-items:center}
+.mrow div:first-child{text-align:left;overflow:hidden;white-space:nowrap}
+.fix{background:#0f172a;padding:8px;border-radius:8px;margin:4px 0;display:flex;justify-content:space-between;align-items:center;font-size:12px;border-left:3px solid #3b82f6}
+.fix.live{border-left-color:#22c55e;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.6}}
+.hidden{display:none}.small{font-size:10px;color:#94a3b8}
+input,select{width:100%;padding:9px;margin:3px 0;border-radius:8px;border:none}
 </style></head><body>
 <div class="hero">
-<div style="display:flex;justify-content:space-between"><div class="logo"><span class="e">e</span>BALLER</div><div class="small">KISUMU | Loop 0141939000</div></div>
-<div class="title">LEAGUE<br>STANDINGS</div>
-<div id="loginBox" class="pin-card" style="max-width:340px;margin:10px auto"><input id="pin" type="password" placeholder="Admin PIN 1234"><button class="green" style="width:100%" onclick="unlock()">Unlock Admin Editor</button></div>
-<div class="table-wrap"><div class="header-row"><div>👑 TEAM</div><div>P</div><div>W</div><div>D</div><div>L</div><div>GF</div><div>GA</div><div>GD</div><div>PTS</div></div><div id="rows"></div></div>
-<div class="sub">THE CHASE IS ON!</div>
+<div style="display:flex;justify-content:space-between"><div class="logo">🎱 e-<b>BALLER</b> DESK CONTROL</div><div class="small">Loop 0141939000</div></div>
+<div id="loginBox" class="card" style="max-width:340px;margin:8px auto"><input id="pin" type="password" placeholder="Admin PIN 1234"><button class="green" style="width:100%" onclick="unlock()">Unlock Desk Control</button></div>
+
+<div id="main" class="hidden">
+<div class="row"><button class="blue" onclick="show('desks')">Desks</button><button class="gold" onclick="show('table')">Table</button><button class="green" onclick="show('fixtures')">Fixtures</button><button class="gray" onclick="show('control')">Match Control</button></div>
+
+<div id="desksSec">
+<div class="card"><h3 style="margin:0">🎱 8 Desks - Unlock / Lock</h3><div id="desks" class="desk" style="margin-top:8px"></div></div>
 </div>
-<div id="adminPanel" class="hidden">
-<div class="pin-card"><h3>Edit Teams</h3><div id="editList"></div><div style="display:flex;gap:6px"><button class="green" onclick="addTeam()">+ Add</button><button class="blue" onclick="saveAll()">💾 Save</button><button class="danger" onclick="resetSample()">Reset</button></div></div>
-<div class="pin-card"><h4>Add Result</h4><div class="admin-grid"><select id="teamA"></select><input id="scoreA" type="number" placeholder="Score A"><select id="teamB"></select><input id="scoreB" type="number" placeholder="Score B"></div><button class="blue" style="width:100%;margin-top:6px" onclick="addResult()">Add Result</button><div id="hist" class="small"></div></div>
+
+<div id="tableSec" class="hidden">
+<div class="card" style="background:linear-gradient(180deg,#ffffff0d,#0009);border:1px solid #ffffff22">
+<h3 style="margin:0;text-align:center;font-family:Orbitron">LEAGUE STANDINGS - AUTO</h3>
+<div class="hrow"><div>👑 PLAYER</div><div>P</div><div>W</div><div>L</div><div>GF</div><div>GA</div><div>PTS</div></div>
+<div id="rows"></div>
+<div style="display:flex;gap:4px;margin-top:8px"><button class="green" onclick="shareWhatsApp()">📲 Share Table to WhatsApp Group</button><button class="blue" onclick="shareFixtures()">📲 Share Fixtures to WhatsApp</button></div>
 </div>
+</div>
+
+<div id="fixturesSec" class="hidden">
+<div class="card"><h3>⚡ Auto Fixtures - Auto Picks Next Matches</h3>
+<div class="row" style="margin-bottom:6px"><button class="blue" onclick="autoPick()">🎲 Auto-Pick Next Round</button><button class="green" onclick="startNext()">▶️ Start Next Fixture</button><button class="gold" onclick="shareFixtures()">Share to WA</button></div>
+<div id="fixtures"></div>
+</div>
+</div>
+
+<div id="controlSec" class="hidden">
+<div class="card"><h3>🎮 Match Control - Referee Only</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+<select id="liveMatch"></select><select id="deskSel"><option>Table 1</option><option>Table 2</option><option>Table 3</option><option>Table 4</option><option>Table 5</option><option>Table 6</option><option>Table 7</option><option>Table 8</option></select>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+<button class="green" onclick="awardWin()">🏆 Award Winner</button><button class="blue" onclick="unlockDesk()">🔓 Unlock Desk</button>
+<button class="gold" onclick="postpone()">⏸️ Postpone Match</button><button class="gray" onclick="rematch()">🔄 Rematch</button>
+<button class="red" onclick="disqualify()">🚫 Disqualify Player</button><button class="red" onclick="cancelMatch()">❌ Cancel Match</button>
+</div>
+<div id="controlHist" class="small" style="margin-top:8px"></div>
+</div>
+</div>
+</div>
+</div>
+
 <script>
-let data=JSON.parse(localStorage.getItem('eballer_league')||'null')||[{name:"Prince Nyaru",P:2,W:2,D:0,L:0,GF:14,GA:4},{name:"Mosalah Jnr",P:2,W:2,D:0,L:0,GF:5,GA:0},{name:"Magnusefb",P:2,W:2,D:0,L:0,GF:14,GA:9},{name:"Stone Of Heaven",P:2,W:1,D:1,L:0,GF:7,GA:1},{name:"Chris Gray",P:2,W:1,D:1,L:0,GF:4,GA:2},{name:"Jah Raze",P:1,W:1,D:0,L:0,GF:3,GA:1},{name:"Ghost",P:2,W:1,D:0,L:1,GF:8,GA:7},{name:"Sydyato",P:2,W:1,D:0,L:1,GF:9,GA:12},{name:"Be Nice",P:2,W:0,D:1,L:1,GF:0,GA:2},{name:"Diaz",P:2,W:0,D:1,L:1,GF:4,GA:9},{name:"Savage",P:1,W:0,D:0,L:1,GF:0,GA:3},{name:"Mdcartel",P:2,W:0,D:0,L:2,GF:6,GA:9},{name:"Muhindi",P:2,W:0,D:0,L:2,GF:6,GA:13},{name:"Leny Yoro",P:2,W:0,D:0,L:2,GF:1,GA:9}];
-function calc(){data.forEach(t=>{t.GD=t.GF-t.GA;t.PTS=t.W*3+t.D});data.sort((a,b)=>b.PTS-a.PTS||b.GD-a.GD||b.GF-a.GF)}
-function render(){calc();let html='';data.forEach((t,i)=>{let cls=i===0?'row leader':i<3?'row pos2-3':i<5?'row pos2-3':i>=10?'row low':'row mid';let crown=i===0?'👑':'';html+=`<div class="${cls}"><div><span class="rank">${i+1}.</span> ${crown} ${t.name}</div><div>${t.P}</div><div>${t.W}</div><div>${t.D}</div><div>${t.L}</div><div>${t.GF}</div><div>${t.GA}</div><div>${t.GD}</div><div class="pts">${t.PTS}</div></div>`;});rows.innerHTML=html;let edit='';data.forEach((t,i)=>{edit+=`<div style="display:grid;grid-template-columns:2fr 0.5fr 0.5fr 0.5fr 0.5fr 0.6fr 0.6fr 0.4fr;gap:4px;margin:4px 0"><input value="${t.name}" id="n${i}"><input value="${t.P}" type="number" id="p${i}"><input value="${t.W}" type="number" id="w${i}"><input value="${t.D}" type="number" id="d${i}"><input value="${t.L}" type="number" id="l${i}"><input value="${t.GF}" type="number" id="gf${i}"><input value="${t.GA}" type="number" id="ga${i}"><button class="danger" onclick="delTeam(${i})">X</button></div>`;});editList.innerHTML=edit;let opts=data.map(t=>`<option>${t.name}</option>`).join('');teamA.innerHTML=opts;teamB.innerHTML=opts;}
-function unlock(){if(pin.value==='1234'){adminPanel.classList.remove('hidden');loginBox.classList.add('hidden')}else alert('Wrong')}
-function saveAll(){data=data.map((t,i)=>{return{name:document.getElementById('n'+i).value||t.name,P:+document.getElementById('p'+i).value||0,W:+document.getElementById('w'+i).value||0,D:+document.getElementById('d'+i).value||0,L:+document.getElementById('l'+i).value||0,GF:+document.getElementById('gf'+i).value||0,GA:+document.getElementById('ga'+i).value||0}});localStorage.setItem('eballer_league',JSON.stringify(data));render();alert('Saved!')}
-function addTeam(){data.push({name:"New Player",P:0,W:0,D:0,L:0,GF:0,GA:0});render()}
-function delTeam(i){if(confirm('Delete '+data[i].name+'?')){data.splice(i,1);localStorage.setItem('eballer_league',JSON.stringify(data));render()}}
-function addResult(){let a=teamA.value,b=teamB.value,sa=+scoreA.value,sb=+scoreB.value;if(a===b)return alert('Pick 2 different');if(isNaN(sa)||isNaN(sb))return alert('Scores');let ta=data.find(x=>x.name===a),tb=data.find(x=>x.name===b);ta.P++;tb.P++;ta.GF+=sa;ta.GA+=sb;tb.GF+=sb;tb.GA+=sa;if(sa>sb){ta.W++;tb.L++;}else if(sb>sa){tb.W++;ta.L++;}else{ta.D++;tb.D++;}let h=JSON.parse(localStorage.getItem('eb_hist')||'[]');h.unshift({a,b,sa,sb,time:new Date().toLocaleString()});localStorage.setItem('eb_hist',JSON.stringify(h.slice(0,50)));localStorage.setItem('eballer_league',JSON.stringify(data));scoreA.value='';scoreB.value='';render();renderHist();}
-function renderHist(){let h=JSON.parse(localStorage.getItem('eb_hist')||'[]');hist.innerHTML=h.map(x=>`${x.time}: ${x.a} ${x.sa}-${x.sb} ${x.b}`).join('<br>')||'No results'}
-function resetSample(){if(confirm('
+let league=JSON.parse(localStorage.getItem('eballer_league')||'[]');
+let fixtures=JSON.parse(localStorage.getItem('eb_fixtures')||'[]');
+let desks=JSON.parse(localStorage.getItem('eb_desks')||'{"Table 1":"free","Table 2":"free","Table 3":"free","Table 4":"free","Table 5":"free","Table 6":"free","Table 7":"free","Table 8":"free"}');
+let hist=JSON.parse(localStorage.getItem('eb_hist')||'[]');
+
+function init(){
+ if(league.length===0){
+  ["Prince Nyaru","Mosalah Jnr","Magnusefb","Stone Of Heaven","Chris Gray","Jah Raze","Ghost","Sydyato"].forEach(n=>league.push({name:n,P:0,W:0,L:0,GF:0,GA:0,GD:0,PTS:0}));
+ }
+ save();
+}
+function calc(){league.forEach(t=>{t.GD=t.GF-t.GA;t.PTS=t.W*3});league.sort((a,b)=>b.PTS-a.PTS||b.GD-a.GD);}
+function render(){
+ calc();
+ let html='';league.forEach((t,i)=>{
+  let crown=i===0?'👑':'';
+  html+=`<div class="mrow" style="${i===0?'background:linear-gradient(90deg,#facc15,#eab308);color:#000;font-weight:900':''}"><div>${i+1}. ${crown} ${t.name}</div><div>${t.P}</div><div>${t.W}</div><div>${t.L}</div><div>${t.GF}</div><div>${t.GA}</div><div style="color:#facc15;font-weight:900">${t.PTS}</div></div>`;
+ });document.getElementById('rows').innerHTML=html;
+ renderDesks(); renderFixtures();
+}
+function renderDesks(){
+ let h='';for(let i=1;i<=8;i++){
+  let t='Table '+i; let st=desks[t]||'free'; let cls=st==='free'?'free':st==='busy'?'busy':'post';
+  let txt=st==='free'?'FREE - Click to Lock':st==='busy'?'BUSY - '+st.replace('busy:',''): 'POSTPONED';
+  h+=`<div class="deskBox ${cls}" onclick="toggleDesk('${t}')">${t}<br><span style="font-size:10px">${txt}</span></div>`;
+ }document.getElementById('desks').innerHTML=h;
+}
+function toggleDesk(t){
+ if(desks[t]==='free'){let m=prompt('Enter match e.g. Otis vs Brian'); if(m){desks[t]='busy:'+m;}}else{desks[t]='free';}
+ save();
+}
+function unlockDesk(){
+ let t=deskSel.value; desks[t]='free'; save(); alert(t+' Unlocked ✅ Desk free now');
+}
+function renderFixtures(){
+ if(fixtures.length===0) autoPick();
+ let html=fixtures.map((f,i)=>{
+  let live=f.status==='live'?'fix live':'fix';
+  return `<div class="${live}"><div><b>${f.a} vs ${f.b}</b><br><span class="small">${f.table} - ${f.status.toUpperCase()} ${f.winner?'Winner:'+f.winner:''}</span></div><div><button class="blue" style="padding:4px 6px;font-size:10px" onclick="setLive(${i})">Start</button></div></div>`;
+ }).join('');
+ document.getElementById('fixtures').innerHTML=html;
+ let opts=fixtures.filter(f=>f.status!=='done').map((f,i)=>`<option value="${i}">${f.a} vs ${f.b} @ ${f.table}</option>`).join('');
+ document.getElementById('liveMatch').innerHTML=opts||'<option>No live fixtures</option>';
+}
+function autoPick(){
+ // Auto Round Robin pick from league - pairs not played
+ fixtures=[]; let names=league.map(x=>x.name);
+ for(let i=0;i<names.length;i+=2){
+  if(names[i+1]) fixtures.push({a:names[i],b:names[i+1],table:'Table '+( (i/2)%8+1 ),status:'upcoming',winner:''});
+ }
+ if(fixtures.length===0) fixtures.push({a:names[0],b:names[1],table:'Table 1',status:'upcoming',winner:''});
+ save();
+}
+function startNext(){
+ let next=fixtures.find(f=>f.status==='upcoming');
+ if(!next)return alert('No upcoming'); next.status='live'; desks[next.table]='busy:'+next.a+' vs '+next.b; save(); alert('Started: '+next.a+' vs '+next.b+' on '+next.table);
+}
+function setLive(i){ fixtures[i].status='live'; desks[fixtures[i].table]='busy:'+fixtures[i].a+' vs '+fixtures[i].b; save(); show('control');}
+function awardWin(){
+ let idx=liveMatch.value; if(idx==='')return alert('Pick match'); let f=fixtures[idx];
+ let winner=prompt('Who won? Type: '+f.a+' OR '+f.b, f.a); if(!winner)return;
+ if(![f.a,f.b].includes(winner))return alert('Type exact name');
+ f.winner=winner; f.status='done';
+ let ta=league.find(x=>x.name===f.a), tb=league.find(x=>x.name===f.b);
+ ta.P++; tb.P++;
+ if(winner===f.a){ta.W++;tb.L++;ta.GF+=3;tb.GA+=3;}else{tb.W++;ta.L++;tb.GF+=3;ta.GA+=3;}
+ desks[f.table]='free'; hist.unshift({a:f.a,b:f.b,winner,time:new Date().toLocaleString(),table:f.table});
+ save(); alert('🏆 Winner awarded: '+winner+' | Table auto-updated | Desk '+f.table+' unlocked');
+ autoShareResult(f);
+}
+function postpone(){let idx=liveMatch.value; if(idx===''){return} fixtures[idx].status='postponed'; desks[fixtures[idx].table]='postponed'; save(); alert('⏸️ Match postponed');}
+function rematch(){let idx=liveMatch.value; if(idx===''){return} fixtures[idx].status='upcoming'; fixtures[idx].winner=''; save(); alert('🔄 Rematch set');}
+function disqualify(){
+ let name=prompt('Player to disqualify?'); if(!name)return;
+ if(confirm('Disqualify '+name+' - Remove all his matches & ban?')){
+  league=league.filter(x=>x.name!==name); fixtures=fixtures.filter(f=>f.a!==name&&f.b!==name); save(); alert('🚫 '+name+' disqualified & removed');
+ }
+}
+function cancelMatch(){let idx=liveMatch.value; if(idx===''){return} if(confirm('Cancel this match?')){fixtures.splice(idx,1); save();}}
+function save(){localStorage.setItem('eballer_league',JSON.stringify(league));localStorage.setItem('eb_fixtures',JSON.stringify(fixtures));localStorage.setItem('eb_desks',JSON.stringify(desks));localStorage.setItem('eb_hist',JSON.stringify(hist.slice(0,100)));render();renderHist();}
+function renderHist(){document.getElementById('controlHist').innerHTML=hist.map(h=>`${h.time}: ${h.a} vs ${h.b} Winner:${h.winner} @${h.table}`).join('<br>')||'No matches';}
+function show(id){['desks','table','fixtures','control'].forEach(s=>document.getElementById(s+'Sec').classList.add('hidden'));document.getElementById(id+'Sec').classList.remove('hidden');}
+function unlock(){if(pin.value==='1234'){document.getElementById('loginBox').classList.add('hidden');document.getElementById('main').classList.remove('hidden');init();render();}else alert('Wrong
