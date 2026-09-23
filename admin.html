@@ -77,20 +77,12 @@ function save(){
 
 function render(){
   document.getElementById('count').innerText = players.length+'/32 | '+pending.length+' waiting';
-
   let pH = '';
   if(!pending.length){
     pH = '<p style="color:#888">No pending</p>';
   } else {
     pending.forEach((p,i)=>{
-      pH += `<div style="background:#111;padding:10px;margin:6px 0;border-radius:8px;display:flex;justify-content:space-between">
-      <span><b>${p.name}</b> <span style="color:#ffcc00">(${p.club})</span><br><small>${p.code}</small></span>
-      <span>
-        <button class="btn g" onclick="approve(${i})">OK</button>
-        <button class="btn wa" onclick="approveAndShare(${i})">OK+SHARE</button>
-        <button class="btn r" onclick="reject(${i})">X</button>
-      </span>
-      </div>`;
+      pH += '<div style="background:#111;padding:10px;margin:6px 0;border-radius:8px;display:flex;justify-content:space-between"><span><b>'+p.name+'</b> <span style="color:#ffcc00">('+p.club+')</span><br><small>'+p.code+'</small></span><span><button class="btn g" onclick="approve('+i+')">OK</button><button class="btn wa" onclick="approveAndShare('+i+')">OK+SHARE</button><button class="btn r" onclick="reject('+i+')">X</button></span></div>';
     });
   }
   document.getElementById('pendingList').innerHTML = pH;
@@ -99,20 +91,17 @@ function render(){
   let tH = '';
   table.forEach((t,i)=>{
     let real = players.find(p=>p.club==t.Club);
-    tH += `<tr><td>${i+1}</td><td style="color:#00ff88">${t.Club}</td><td>${real?real.name:'-'}</td><td>${t.Pts}</td><td><button class="btn r" onclick="removeP('${t.Club}')">Del</button></td></tr>`;
+    tH += '<tr><td>'+(i+1)+'</td><td style="color:#00ff88">'+t.Club+'</td><td>'+(real?real.name:'-')+'</td><td>'+t.Pts+'</td><td><button class="btn r" onclick="removeP(\''+t.Club+'\')">Del</button></td></tr>';
   });
   document.getElementById('tableBody').innerHTML = tH;
 
-  let opts = players.map(p=>`<option>${p.club}</option>`).join('');
+  let opts = players.map(p=>'<option>'+p.club+'</option>').join('');
   document.getElementById('h').innerHTML = opts;
   document.getElementById('a').innerHTML = opts;
 
   let fH = '';
   fixtures.forEach((f,i)=>{
-    fH += `<div style="padding:6px;border-bottom:1px solid #333;display:flex;justify-content:space-between">
-    <span>${f.played?'✅':'⏳'} ${f.home} ${f.played?f.hg+'-'+f.ag:''} ${f.away}</span>
-    <span>${!f.played?`<button class="btn g" onclick="qEnd(${i})">End</button>`:`<button class="btn r" onclick="disq(${i})">Disq</button>`}</span>
-    </div>`;
+    fH += '<div style="padding:6px;border-bottom:1px solid #333;display:flex;justify-content:space-between"><span>'+(f.played?'✅':'⏳')+' '+f.home+' '+(f.played?f.hg+'-'+f.ag:'')+' '+f.away+'</span><span>'+(!f.played?'<button class="btn g" onclick="qEnd('+i+')">End</button>':'<button class="btn r" onclick="disq('+i+')">Disq</button>')+'</span></div>';
   });
   document.getElementById('fixList').innerHTML = fH;
 }
@@ -131,7 +120,7 @@ function approveAndShare(i){
   table.push({Club:p.club, MP:0, Pts:0});
   pending.splice(i,1);
   save();
-  let text = `*DESK UNLOCKED* ✅%0A*${p.name} (${p.club})* Approved! Welcome to E-Baller S1%0A%0AFull Table: https://sydyatoke-cell.github.io/eballer-online/%0AGroup: ${GROUP}`;
+  let text = '*DESK UNLOCKED* ✅%0A*'+p.name+' ('+p.club+')* Approved! Welcome to E-Baller S1%0A%0AFull Table: https://sydyatoke-cell.github.io/eballer-online/%0AGroup: '+GROUP;
   window.open('https://wa.me/?text='+text, '_blank');
 }
 
@@ -150,55 +139,12 @@ function removeP(c){
 
 function autoGroup(){
   table.sort((a,b)=>b.Pts-a.Pts);
-  let list = table.slice(0,20).map((t,i)=>`${i+1}. *${t.Club}* - ${t.Pts}pts (${t.MP}MP)`).join('%0A');
-  let text = `*E-BALLER S1 LIVE TABLE* 🏆%0A%0A${list}%0A%0AFull Table: https://sydyatoke-cell.github.io/eballer-online/%0AGroup: ${GROUP}`;
+  let list = table.slice(0,20).map((t,i)=>(i+1)+'. *'+t.Club+'* - '+t.Pts+'pts ('+t.MP+'MP)').join('%0A');
+  let text = '*E-BALLER S1 LIVE TABLE* 🏆%0A%0A'+list+'%0A%0AFull Table: https://sydyatoke-cell.github.io/eballer-online/%0AGroup: '+GROUP;
   window.open('https://wa.me/?text='+text, '_blank');
 }
 
 function copyTable(){
-  let list = table.slice(0,20).map((t,i)=>`${i+1}. ${t.Club} - ${t.Pts}pts (${t.MP}MP)`).join('\n');
-  let msg = `*E-BALLER S1 TABLE* 🏆\n\n${list}\n\nFull: https://sydyatoke-cell.github.io/eballer-online/\nGroup: ${GROUP}`;
-  navigator.clipboard.writeText(msg).then(()=>{
-    document.getElementById('copyMsg').innerText='✅ COPIED - Paste in WhatsApp';
-    setTimeout(()=>{document.getElementById('copyMsg').innerText='';},3000);
-  });
-}
-
-function endM(){
-  let h = document.getElementById('h').value;
-  let a = document.getElementById('a').value;
-  let hg = parseInt(document.getElementById('hg').value);
-  let ag = parseInt(document.getElementById('ag').value);
-  let f = fixtures.find(x=>x.home==h && x.away==a &&!x.played);
-  if(!f) return alert('Fixture not found');
-  f.played = true; f.hg = hg; f.ag = ag;
-  table.forEach(t=>{
-    if(t.Club==h || t.Club==a) t.MP++;
-    if(hg>ag && t.Club==h) t.Pts+=3;
-    if(ag>hg && t.Club==a) t.Pts+=3;
-    if(hg==ag) t.Pts+=1;
-  });
-  save();
-}
-
-function qEnd(i){
-  let f = fixtures[i];
-  let hg = prompt(f.home+' goals','2');
-  if(hg==null) return;
-  let ag = prompt(f.away+' goals','1');
-  f.played = true; f.hg = parseInt(hg); f.ag = parseInt(ag);
-  table.forEach(t=>{
-    if(t.Club==f.home || t.Club==f.away) t.MP++;
-    if(f.hg>f.ag && t.Club==f.home) t.Pts+=3;
-    if(f.ag>f.hg && t.Club==f.away) t.Pts+=3;
-    if(f.hg==f.ag) t.Pts+=1;
-  });
-  save();
-}
-
-function disq(i){
-  let f = fixtures[i];
-  table.forEach(t=>{
-    if(t.Club==f.home || t.Club==f.away) t.MP=Math.max(0,t.MP-1);
-    if(f.hg>f.ag && t.Club==f.home) t.Pts=Math.max(0,t.Pts-3);
-    if(f.ag>f.hg && t.Club==f.away) t.Pts=Math.max(0,t.Pts-3
+  let list = table.slice(0,20).map((t,i)=>(i+1)+'. '+t.Club+' - '+t.Pts+'pts ('+t.MP+'MP)').join('\n');
+  let msg = '*E-BALLER S1 TABLE* 🏆\n\n'+list+'\n\nFull: https://sydyatoke-cell.github.io/eballer-online/\nGroup: '+GROUP;
+  navigator
