@@ -8,53 +8,197 @@
 body{background:#0a0a0f;color:#fff;font-family:Arial;padding:10px}
 .card{background:#1a1a2e;border:2px solid #a855f7;border-radius:12px;padding:12px;margin:10px 0}
 .btn{padding:10px;border:none;border-radius:8px;font-weight:bold;margin:4px;cursor:pointer}
-.g{background:#00ff88;color:#000}.wa{background:#25D366;color:#fff}.r{background:#ff4444;color:#fff}.y{background:#ffcc00;color:#000}.b{background:#0088ff;color:#fff}
+.g{background:#00ff88;color:#000}
+.wa{background:#25D366;color:#fff}
+.r{background:#ff4444;color:#fff}
+.b{background:#0088ff;color:#fff}
 .pending{border-color:#ffcc00;background:#332200}
-table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #333;font-size:13px}
+table{width:100%;border-collapse:collapse}
+td,th{padding:8px;border-bottom:1px solid #333;font-size:13px}
 </style>
 </head>
 <body>
-<script>if(prompt('Admin Password:')!=='0753'){document.body.innerHTML='<h2>Denied</h2>';throw Error}</script>
+<script>
+if(prompt('Admin Password:')!=='0753'){
+  document.body.innerHTML='<h2>Denied</h2>';
+  throw Error('Denied');
+}
+</script>
 
-<div class="card pending"><h3>⏳ PENDING</h3><div id="pendingList"></div></div>
+<div class="card pending">
+<h3>⏳ PENDING</h3>
+<div id="pendingList"></div>
+</div>
 
 <div class="card">
 <h3>🏆 TABLE + AUTO SHARE</h3>
 <p id="count"></p>
-<button class="btn wa" style="width:100%;padding:14px;font-size:16px" onclick="autoGroup()">🚀 AUTO SHARE TABLE TO GROUP - 1 TAP</button>
-<button class="btn b" style="width:100%" onclick="copyTable()">📋 COPY TABLE (No WhatsApp Open)</button>
+<button class="btn wa" style="width:100%;padding:14px;font-size:16px" onclick="autoGroup()">
+🚀 AUTO SHARE TABLE TO GROUP - 1 TAP
+</button>
+<button class="btn b" style="width:100%" onclick="copyTable()">
+📋 COPY TABLE (No WhatsApp Open)
+</button>
 <p id="copyMsg" style="color:#00ff88;text-align:center;font-weight:bold"></p>
-<table><thead><tr><th>#</th><th>Username</th><th>Real Name</th><th>Pts</th><th>Action</th></tr></thead><tbody id="tableBody"></tbody></table>
+<table>
+<thead><tr><th>#</th><th>Username</th><th>Real Name</th><th>Pts</th><th>Action</th></tr></thead>
+<tbody id="tableBody"></tbody>
+</table>
 </div>
 
-<div class="card"><h3>📅 MATCHES</h3><div style="display:flex;gap:4px"><select id="h"></select><input id="hg" type="number" style="width:45px" placeholder="H"> vs <input id="ag" type="number" style="width:45px" placeholder="A"><select id="a"></select><button class="btn g" onclick="endM()">END</button></div><div id="fixList" style="margin-top:10px"></div></div>
+<div class="card">
+<h3>📅 MATCHES</h3>
+<div style="display:flex;gap:4px;flex-wrap:wrap">
+<select id="h"></select>
+<input id="hg" type="number" style="width:45px" placeholder="H">
+vs
+<input id="ag" type="number" style="width:45px" placeholder="A">
+<select id="a"></select>
+<button class="btn g" onclick="endM()">END</button>
+</div>
+<div id="fixList" style="margin-top:10px"></div>
+</div>
 
 <script>
-let players=JSON.parse(localStorage.getItem('eballer_players')||'[]'),pending=JSON.parse(localStorage.getItem('eballer_pending')||'[]'),fixtures=JSON.parse(localStorage.getItem('eballer_fixtures')||'[]'),table=JSON.parse(localStorage.getItem('eballer_table')||'[]'),locked=JSON.parse(localStorage.getItem('eballer_locked')||'[]');
-const GROUP="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0";
-function save(){localStorage.setItem('eballer_players',JSON.stringify(players));localStorage.setItem('eballer_pending',JSON.stringify(pending));localStorage.setItem('eballer_fixtures',JSON.stringify(fixtures));localStorage.setItem('eballer_table',JSON.stringify(table));render();}
+let players = JSON.parse(localStorage.getItem('eballer_players')||'[]');
+let pending = JSON.parse(localStorage.getItem('eballer_pending')||'[]');
+let fixtures = JSON.parse(localStorage.getItem('eballer_fixtures')||'[]');
+let table = JSON.parse(localStorage.getItem('eballer_table')||'[]');
+
+const GROUP = "https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0";
+
+function save(){
+  localStorage.setItem('eballer_players', JSON.stringify(players));
+  localStorage.setItem('eballer_pending', JSON.stringify(pending));
+  localStorage.setItem('eballer_fixtures', JSON.stringify(fixtures));
+  localStorage.setItem('eballer_table', JSON.stringify(table));
+  render();
+}
+
 function render(){
- document.getElementById('count').innerText=players.length+'/32 | '+pending.length+' waiting';
- let pH='';if(!pending.length)pH='<p style="color:#888">No pending</p>';else pending.forEach((p,i)=>{pH+=`<div style="background:#111;padding:10px;margin:6px 0;border-radius:8px;display:flex;justify-content:space-between"><span><b>${p.name}</b> <span style="color:#ffcc00">(${p.club})</span><br><small>${p.code}</small></span><span><button class="btn g" onclick="approve(${i})">OK</button><button class="btn wa" onclick="approveAndShare(${i})">OK+SHARE TO GROUP</button><button class="btn r" onclick="reject(${i})">X</button></span></div>`});document.getElementById('pendingList').innerHTML=pH;
- table.sort((a,b)=>b.Pts-a.Pts);let tH='';table.forEach((t,i)=>{let r=players.find(p=>p.club==t.Club);tH+=`<tr><td>${i+1}</td><td style="color:#00ff88">${t.Club}</td><td>${r?r.name:'-'}</td><td>${t.Pts}</td><td><button class="btn r" onclick="removeP('${t.Club}')">Del</button></td></tr>`});document.getElementById('tableBody').innerHTML=tH;
- let o=players.map(p=>`<option>${p.club}</option>`).join('');document.getElementById('h').innerHTML=o;document.getElementById('a').innerHTML=o;
- let fH='';fixtures.forEach((f,i)=>{fH+=`<div style="padding:6px;border-bottom:1px solid #333;display:flex;justify-content:space-between"><span>${f.played?'✅':'⏳'} ${f.home} ${f.played?f.hg+'-'+f.ag:''} ${f.away}</span><span>${!f.played?`<button class="btn g" onclick="qEnd(${i})">End</button>`:`<button class="btn r" onclick="disq(${i})">Disq</button>`}</span></div>`});document.getElementById('fixList').innerHTML=fH;
+  document.getElementById('count').innerText = players.length+'/32 | '+pending.length+' waiting';
+
+  let pH = '';
+  if(!pending.length){
+    pH = '<p style="color:#888">No pending</p>';
+  } else {
+    pending.forEach((p,i)=>{
+      pH += `<div style="background:#111;padding:10px;margin:6px 0;border-radius:8px;display:flex;justify-content:space-between">
+      <span><b>${p.name}</b> <span style="color:#ffcc00">(${p.club})</span><br><small>${p.code}</small></span>
+      <span>
+        <button class="btn g" onclick="approve(${i})">OK</button>
+        <button class="btn wa" onclick="approveAndShare(${i})">OK+SHARE</button>
+        <button class="btn r" onclick="reject(${i})">X</button>
+      </span>
+      </div>`;
+    });
+  }
+  document.getElementById('pendingList').innerHTML = pH;
+
+  table.sort((a,b)=>b.Pts-a.Pts);
+  let tH = '';
+  table.forEach((t,i)=>{
+    let real = players.find(p=>p.club==t.Club);
+    tH += `<tr><td>${i+1}</td><td style="color:#00ff88">${t.Club}</td><td>${real?real.name:'-'}</td><td>${t.Pts}</td><td><button class="btn r" onclick="removeP('${t.Club}')">Del</button></td></tr>`;
+  });
+  document.getElementById('tableBody').innerHTML = tH;
+
+  let opts = players.map(p=>`<option>${p.club}</option>`).join('');
+  document.getElementById('h').innerHTML = opts;
+  document.getElementById('a').innerHTML = opts;
+
+  let fH = '';
+  fixtures.forEach((f,i)=>{
+    fH += `<div style="padding:6px;border-bottom:1px solid #333;display:flex;justify-content:space-between">
+    <span>${f.played?'✅':'⏳'} ${f.home} ${f.played?f.hg+'-'+f.ag:''} ${f.away}</span>
+    <span>${!f.played?`<button class="btn g" onclick="qEnd(${i})">End</button>`:`<button class="btn r" onclick="disq(${i})">Disq</button>`}</span>
+    </div>`;
+  });
+  document.getElementById('fixList').innerHTML = fH;
 }
-function approve(i){let p=pending[i];players.push(p);table.push({Club:p.club,MP:0,Pts:0});pending.splice(i,1);save();}
+
+function approve(i){
+  let p = pending[i];
+  players.push(p);
+  table.push({Club:p.club, MP:0, Pts:0});
+  pending.splice(i,1);
+  save();
+}
+
 function approveAndShare(i){
- let p=pending[i];players.push(p);table.push({Club:p.club,MP:0,Pts:0});pending.splice(i,1);save();
- let text=`*DESK UNLOCKED* ✅%0A*${p.name} (${p.club})* Approved! Welcome to E-Baller S1%0A%0AFull Table: https://sydyatoke-cell.github.io/eballer-online/%0AGroup: ${GROUP}`;
- window.open('https://wa.me/?text='+text,'_blank');
+  let p = pending[i];
+  players.push(p);
+  table.push({Club:p.club, MP:0, Pts:0});
+  pending.splice(i,1);
+  save();
+  let text = `*DESK UNLOCKED* ✅%0A*${p.name} (${p.club})* Approved! Welcome to E-Baller S1%0A%0AFull Table: https://sydyatoke-cell.github.io/eballer-online/%0AGroup: ${GROUP}`;
+  window.open('https://wa.me/?text='+text, '_blank');
 }
-function reject(i){pending.splice(i,1);save();}
-function removeP(c){if(!confirm('Remove '+c))return;players=players.filter(p=>p.club!=c);table=table.filter(t=>t.Club!=c);fixtures=fixtures.filter(f=>f.home!=c&&f.away!=c);save();}
+
+function reject(i){
+  pending.splice(i,1);
+  save();
+}
+
+function removeP(c){
+  if(!confirm('Remove '+c)) return;
+  players = players.filter(p=>p.club!=c);
+  table = table.filter(t=>t.Club!=c);
+  fixtures = fixtures.filter(f=>f.home!=c && f.away!=c);
+  save();
+}
+
 function autoGroup(){
- table.sort((a,b)=>b.Pts-a.Pts);
- let text=`*E-BALLER S1 LIVE TABLE* 🏆%0A%0A`+table.slice(0,20).map((t,i)=>`${i+1}. *${t.Club}* - ${t.Pts}pts (${t.MP}MP)`).join('%0A')+`%0A%0AFull Table: https://sydyatoke-cell.github.io/eballer-online/%0AGroup: ${GROUP}`;
- window.open('https://wa.me/?text='+text,'_blank');
+  table.sort((a,b)=>b.Pts-a.Pts);
+  let list = table.slice(0,20).map((t,i)=>`${i+1}. *${t.Club}* - ${t.Pts}pts (${t.MP}MP)`).join('%0A');
+  let text = `*E-BALLER S1 LIVE TABLE* 🏆%0A%0A${list}%0A%0AFull Table: https://sydyatoke-cell.github.io/eballer-online/%0AGroup: ${GROUP}`;
+  window.open('https://wa.me/?text='+text, '_blank');
 }
+
 function copyTable(){
- let msg=`*E-BALLER S1 TABLE* 🏆\n\n`+table.slice(0,20).map((t,i)=>`${i+1}. ${t.Club} - ${t.Pts}pts (${t.MP}MP)`).join('\n')+`\n\nFull: https://sydyatoke-cell.github.io/eballer-online/\nGroup: ${GROUP}`;
- navigator.clipboard.writeText(msg).then(()=>{document.getElementById('copyMsg').innerText='✅ COPIED - Paste in WhatsApp';setTimeout(()=>document.getElementById('copyMsg').innerText='',3000)});
+  let list = table.slice(0,20).map((t,i)=>`${i+1}. ${t.Club} - ${t.Pts}pts (${t.MP}MP)`).join('\n');
+  let msg = `*E-BALLER S1 TABLE* 🏆\n\n${list}\n\nFull: https://sydyatoke-cell.github.io/eballer-online/\nGroup: ${GROUP}`;
+  navigator.clipboard.writeText(msg).then(()=>{
+    document.getElementById('copyMsg').innerText='✅ COPIED - Paste in WhatsApp';
+    setTimeout(()=>{document.getElementById('copyMsg').innerText='';},3000);
+  });
 }
-function endM(){let h=document.getElementById('h').value,a=document.getElementById('a').value,hg=parseInt(document.getElementById('hg').value),ag=parseInt(document.getElementById('ag').value);let f=fixtures.find(x=>x
+
+function endM(){
+  let h = document.getElementById('h').value;
+  let a = document.getElementById('a').value;
+  let hg = parseInt(document.getElementById('hg').value);
+  let ag = parseInt(document.getElementById('ag').value);
+  let f = fixtures.find(x=>x.home==h && x.away==a &&!x.played);
+  if(!f) return alert('Fixture not found');
+  f.played = true; f.hg = hg; f.ag = ag;
+  table.forEach(t=>{
+    if(t.Club==h || t.Club==a) t.MP++;
+    if(hg>ag && t.Club==h) t.Pts+=3;
+    if(ag>hg && t.Club==a) t.Pts+=3;
+    if(hg==ag) t.Pts+=1;
+  });
+  save();
+}
+
+function qEnd(i){
+  let f = fixtures[i];
+  let hg = prompt(f.home+' goals','2');
+  if(hg==null) return;
+  let ag = prompt(f.away+' goals','1');
+  f.played = true; f.hg = parseInt(hg); f.ag = parseInt(ag);
+  table.forEach(t=>{
+    if(t.Club==f.home || t.Club==f.away) t.MP++;
+    if(f.hg>f.ag && t.Club==f.home) t.Pts+=3;
+    if(f.ag>f.hg && t.Club==f.away) t.Pts+=3;
+    if(f.hg==f.ag) t.Pts+=1;
+  });
+  save();
+}
+
+function disq(i){
+  let f = fixtures[i];
+  table.forEach(t=>{
+    if(t.Club==f.home || t.Club==f.away) t.MP=Math.max(0,t.MP-1);
+    if(f.hg>f.ag && t.Club==f.home) t.Pts=Math.max(0,t.Pts-3);
+    if(f.ag>f.hg && t.Club==f.away) t.Pts=Math.max(0,t.Pts-3
