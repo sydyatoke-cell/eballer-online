@@ -8,8 +8,7 @@
 body{background:#0a0a0f;color:#fff;font-family:Arial;padding:10px}
 .card{background:#1a1a2e;border:2px solid #00ff88;border-radius:12px;padding:12px;margin:8px 0}
 .btn{background:#00ff88;color:#000;padding:14px;border:none;border-radius:10px;font-weight:bold;width:100%;cursor:pointer}
-.wa{background:#25D366;color:#fff}
-input,select{width:92%;padding:10px;margin:4px;border-radius:8px}
+input{width:92%;padding:12px;margin:6px 0;border-radius:8px;border:none}
 </style>
 </head>
 <body>
@@ -24,14 +23,11 @@ input,select{width:92%;padding:10px;margin:4px;border-radius:8px}
 
 <div class="card" id="reg">
 <h3>Pay & Register</h3>
-<input id="n" placeholder="Your Name">
-<select id="cl">
-<option>Arsenal</option><option>Man City</option><option>Man United</option>
-<option>Liverpool</option><option>Chelsea</option><option>Barcelona</option>
-<option>Real Madrid</option><option>Bayern</option><option>PSG</option><option>Inter</option>
-</select>
+<input id="n" placeholder="Your Real Name (for Mpesa)">
+<input id="u" placeholder="Your Playing Username e.g. SydyPro, KisumuKing">
 <input id="code" placeholder="Mpesa Code e.g. QGH7...">
 <button class="btn" onclick="doReg()">REGISTER - WAIT APPROVAL</button>
+<p style="font-size:11px;color:#888">Username will be your team name in table</p>
 </div>
 
 <div class="card" id="pend" style="display:none;text-align:center;border-color:#ffcc00">
@@ -39,7 +35,7 @@ input,select{width:92%;padding:10px;margin:4px;border-radius:8px}
 <p id="pt"></p>
 <a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" style="display:block;background:#25D366;color:#fff;padding:12px;border-radius:8px;text-decoration:none">GO TO GROUP</a>
 <br>
-<button onclick="resetMe()" style="width:100%;padding:10px;background:#333;color:#fff;border:none;border-radius:8px">Reset / Change Club</button>
+<button onclick="resetMe()" style="width:100%;padding:10px;background:#333;color:#fff;border:none;border-radius:8px">Reset / Edit Username</button>
 </div>
 
 <div id="ok" style="display:none">
@@ -59,19 +55,20 @@ document.getElementById('c').innerText = players.length + '/32 Approved';
 
 function doReg(){
   let name = document.getElementById('n').value.trim();
-  let club = document.getElementById('cl').value;
+  let username = document.getElementById('u').value.trim();
   let code = document.getElementById('code').value.trim();
-  if(!name || !code){ alert('Enter Name + Mpesa Code'); return; }
-  if(players.find(p=>p.club==club)){ alert(club+' already taken'); return; }
-  if(pending.find(p=>p.club==club)){ alert('Already waiting approval'); return; }
+  if(!name || !username || !code){ alert('Fill Real Name + Username + Mpesa Code'); return; }
+  if(username.length < 3){ alert('Username too short'); return; }
+  if(players.find(p=>p.club.toLowerCase()==username.toLowerCase())){ alert('Username '+username+' already taken'); return; }
+  if(pending.find(p=>p.club.toLowerCase()==username.toLowerCase())){ alert('Already waiting approval'); return; }
   
-  let data = {name:name, club:club, code:code};
+  let data = {name:name, club:username, code:code};
   pending.push(data);
   myClub = data;
   localStorage.setItem('eballer_pending', JSON.stringify(pending));
   localStorage.setItem('eballer_myClub', JSON.stringify(myClub));
   check();
-  alert('✅ Registered! Waiting for Admin to Unlock Desk');
+  alert('✅ '+username+' Registered! Waiting for Admin');
 }
 
 function check(){
@@ -95,7 +92,7 @@ function check(){
     document.getElementById('reg').style.display='none';
     document.getElementById('pend').style.display='block';
     document.getElementById('ok').style.display='none';
-    document.getElementById('pt').innerText = myClub.name+' - '+myClub.club+' | '+myClub.code;
+    document.getElementById('pt').innerText = myClub.name+' ('+myClub.club+') | '+myClub.code;
   }
 }
 
@@ -106,7 +103,7 @@ function showData(){
   let h='';
   table.forEach((t,i)=>{
     let isMe = t.Club==myClub.club;
-    h+='<div style="padding:6px;border-bottom:1px solid #333;'+(isMe?'background:#00ff8822;color:#00ff88':'')+'">'+(i+1)+'. '+t.Club+' - '+t.Pts+'pts</div>';
+    h+='<div style="padding:6px;border-bottom:1px solid #333;'+(isMe?'background:#00ff8822;color:#00ff88;font-weight:bold':'')+'">'+(i+1)+'. '+t.Club+' - '+t.Pts+'pts</div>';
   });
   document.getElementById('tb').innerHTML=h||'No table yet';
   
