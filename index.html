@@ -1,22 +1,46 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E-Baller S1</title>
-<style>body{background:#0a0a0f;color:#fff;font-family:Arial;padding:10px}.card{background:#1a1a2e;border:2px solid #00ff88;border-radius:12px;padding:12px;margin:8px 0}.btn{background:#00ff88;color:#000;padding:14px;border:none;border-radius:10px;font-weight:bold;width:100%}.wa{background:#25D366;color:#fff}</style></head><body>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>E-Baller S1</title>
+<style>
+body{background:#0a0a0f;color:#fff;font-family:Arial;padding:10px}
+.card{background:#1a1a2e;border:2px solid #00ff88;border-radius:12px;padding:12px;margin:8px 0}
+.btn{background:#00ff88;color:#000;padding:14px;border:none;border-radius:10px;font-weight:bold;width:100%;cursor:pointer}
+.wa{background:#25D366;color:#fff}
+input,select{width:92%;padding:10px;margin:4px;border-radius:8px}
+</style>
+</head>
+<body>
 
 <div class="card" style="text-align:center">
-<h2 style="color:#00ff88;margin:0">E-FOOTBALL S1</h2>
+<h2 style="color:#00ff88">E-FOOTBALL S1</h2>
 <p>Winner 1000 KES • Entry 50 KES</p>
 <p>PAYBILL 714777 ACC 0141939000</p>
-<a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" class="btn wa" style="display:block;text-decoration:none;text-align:center">💬 JOIN GROUP DIRECT</a>
+<a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" style="display:block;background:#25D366;color:white;padding:12px;border-radius:10px;text-decoration:none;font-weight:bold">💬 JOIN GROUP DIRECT</a>
 <p id="c" style="color:#00ff88"></p>
 </div>
 
-<div class="card" id="reg"><h3>Pay & Register</h3>
-<input id="n" placeholder="Your Name" style="width:92%;padding:10px;margin:4px;border-radius:8px">
-<select id="cl" style="width:97%;padding:10px;margin:4px;border-radius:8px"><option>Arsenal</option><option>Man City</option><option>Man Utd</option><option>Liverpool</option><option>Chelsea</option><option>Barcelona</option><option>Real Madrid</option><option>Bayern</option><option>PSG</option><option>Inter</option></select>
-<input id="code" placeholder="Mpesa Code" style="width:92%;padding:10px;margin:4px;border-radius:8px">
-<button class="btn" onclick="reg()">REGISTER - WAIT APPROVAL</button>
+<div class="card" id="reg">
+<h3>Pay & Register</h3>
+<input id="n" placeholder="Your Name">
+<select id="cl">
+<option>Arsenal</option><option>Man City</option><option>Man United</option>
+<option>Liverpool</option><option>Chelsea</option><option>Barcelona</option>
+<option>Real Madrid</option><option>Bayern</option><option>PSG</option><option>Inter</option>
+</select>
+<input id="code" placeholder="Mpesa Code e.g. QGH7...">
+<button class="btn" onclick="doReg()">REGISTER - WAIT APPROVAL</button>
 </div>
 
-<div class="card" id="pend" style="display:none;text-align:center;border-color:#ffcc00"><h3>⏳ WAITING - DESK LOCKED</h3><p id="pt"></p><a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" class="btn wa" style="display:block;text-decoration:none;text-align:center">GO TO GROUP</a><button onclick="localStorage.clear();location.reload()" style="background:#333;color:#fff;padding:8px;border:none;border-radius:8px;margin-top:8px;width:100%">Reset</button></div>
+<div class="card" id="pend" style="display:none;text-align:center;border-color:#ffcc00">
+<h3>⏳ WAITING - DESK LOCKED</h3>
+<p id="pt"></p>
+<a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" style="display:block;background:#25D366;color:#fff;padding:12px;border-radius:8px;text-decoration:none">GO TO GROUP</a>
+<br>
+<button onclick="resetMe()" style="width:100%;padding:10px;background:#333;color:#fff;border:none;border-radius:8px">Reset / Change Club</button>
+</div>
 
 <div id="ok" style="display:none">
 <div class="card" style="border-color:#00ff88"><h3>✅ UNLOCKED - <span id="mc"></span></h3></div>
@@ -25,13 +49,87 @@
 </div>
 
 <script>
-let P=JSON.parse(localStorage.getItem('eballer_players')||'[]'),Q=JSON.parse(localStorage.getItem('eballer_pending')||'[]'),F=JSON.parse(localStorage.getItem('eballer_fixtures')||'[]'),T=JSON.parse(localStorage.getItem('eballer_table')||'[]'),M=JSON.parse(localStorage.getItem('eballer_myClub')||'null');
-function upd(){document.getElementById('c').innerText=P.length+'/32 Approved';}
-upd();
-function reg(){let n=document.getElementById('n').value,c=document.getElementById('cl').value,cd=document.getElementById('code').value;if(!n||!cd)return alert('Enter details');if(P.find(x=>x.club==c))return alert('Taken');Q.push({name:n,club:c,code:cd});M={name:n,club:c,code:cd};localStorage.setItem('eballer_pending',JSON.stringify(Q));localStorage.setItem('eballer_myClub',JSON.stringify(M));chk();}
-function chk(){M=JSON.parse(localStorage.getItem('eballer_myClub')||'null');if(!M){regCard();return}if(P.find(p=>p.club==M.club)){show();}else if(Q.find(q=>q.club==M.club)){pendCard();}else{localStorage.removeItem('eballer_myClub');regCard();}}
-function regCard(){document.getElementById('reg').style.display='block';document.getElementById('pend').style.display='none';document.getElementById('ok').style.display='none';}
-function pendCard(){document.getElementById('reg').style.display='none';document.getElementById('pend').style.display='block';document.getElementById('ok').style.display='none';document.getElementById('pt').innerText=M.name+' - '+M.club+' | '+M.code+'\nDesk 🔒 Locked - Admin will Unlock soon';}
-function show(){document.getElementById('reg').style.display='none';document.getElementById('pend').style.display='none';document.getElementById('ok').style.display='block';document.getElementById('mc').innerText=M.club;let h='';T.sort((a,b)=>b.Pts-a.Pts);T.forEach((t,i)=>{h+=`<div style="padding:6px;border-bottom:1px solid #333;${t.Club==M.club?'background:#00ff8822;color:#00ff88':''}">${i+1}. ${t.Club} - ${t.Pts}pts (${t.MP}MP)</div>`});document.getElementById('tb').innerHTML=h;let mf=F.filter(f=>f.home==M.club||f.away==M.club),mh='';if(!mf.length)mh='No fixtures yet';else mf.forEach(f=>{mh+=`<div style="padding:5px;border-bottom:1px solid #222">${f.played?'✅':'⏳'} ${f.home} ${f.played?f.hg+'-'+f.ag:''} ${f.away}</div>`});document.getElementById('mf').innerHTML=mh;let ah='';F.slice(0,20).forEach(f=>{ah+=`<div style="padding:4px;border-bottom:1px solid #222;font-size:12px">${f.played?'✅':'⏳'} GW${f.week}: ${f.home} ${f.played?f.hg+'-'+f.ag:''} ${f.away}</div>`});document.getElementById('af').innerHTML=ah||'No fixtures';}
-chk();
-</script></body></html>
+let players = JSON.parse(localStorage.getItem('eballer_players')||'[]');
+let pending = JSON.parse(localStorage.getItem('eballer_pending')||'[]');
+let fixtures = JSON.parse(localStorage.getItem('eballer_fixtures')||'[]');
+let table = JSON.parse(localStorage.getItem('eballer_table')||'[]');
+let myClub = JSON.parse(localStorage.getItem('eballer_myClub')||'null');
+
+document.getElementById('c').innerText = players.length + '/32 Approved';
+
+function doReg(){
+  let name = document.getElementById('n').value.trim();
+  let club = document.getElementById('cl').value;
+  let code = document.getElementById('code').value.trim();
+  if(!name || !code){ alert('Enter Name + Mpesa Code'); return; }
+  if(players.find(p=>p.club==club)){ alert(club+' already taken'); return; }
+  if(pending.find(p=>p.club==club)){ alert('Already waiting approval'); return; }
+  
+  let data = {name:name, club:club, code:code};
+  pending.push(data);
+  myClub = data;
+  localStorage.setItem('eballer_pending', JSON.stringify(pending));
+  localStorage.setItem('eballer_myClub', JSON.stringify(myClub));
+  check();
+  alert('✅ Registered! Waiting for Admin to Unlock Desk');
+}
+
+function check(){
+  myClub = JSON.parse(localStorage.getItem('eballer_myClub')||'null');
+  players = JSON.parse(localStorage.getItem('eballer_players')||'[]');
+  pending = JSON.parse(localStorage.getItem('eballer_pending')||'[]');
+  
+  if(!myClub){
+    document.getElementById('reg').style.display='block';
+    document.getElementById('pend').style.display='none';
+    document.getElementById('ok').style.display='none';
+    return;
+  }
+  if(players.find(p=>p.club==myClub.club)){
+    document.getElementById('reg').style.display='none';
+    document.getElementById('pend').style.display='none';
+    document.getElementById('ok').style.display='block';
+    document.getElementById('mc').innerText=myClub.club;
+    showData();
+  } else {
+    document.getElementById('reg').style.display='none';
+    document.getElementById('pend').style.display='block';
+    document.getElementById('ok').style.display='none';
+    document.getElementById('pt').innerText = myClub.name+' - '+myClub.club+' | '+myClub.code;
+  }
+}
+
+function showData(){
+  table = JSON.parse(localStorage.getItem('eballer_table')||'[]');
+  fixtures = JSON.parse(localStorage.getItem('eballer_fixtures')||'[]');
+  table.sort((a,b)=>b.Pts-a.Pts);
+  let h='';
+  table.forEach((t,i)=>{
+    let isMe = t.Club==myClub.club;
+    h+='<div style="padding:6px;border-bottom:1px solid #333;'+(isMe?'background:#00ff8822;color:#00ff88':'')+'">'+(i+1)+'. '+t.Club+' - '+t.Pts+'pts</div>';
+  });
+  document.getElementById('tb').innerHTML=h||'No table yet';
+  
+  let myFix = fixtures.filter(f=>f.home==myClub.club || f.away==myClub.club);
+  let mh='';
+  myFix.forEach(f=>{
+    mh+='<div style="padding:5px;border-bottom:1px solid #222">'+(f.played?'✅':'⏳')+' '+f.home+' '+(f.played?f.hg+'-'+f.ag:'')+' '+f.away+'</div>';
+  });
+  document.getElementById('mf').innerHTML=mh||'No fixtures yet - wait admin';
+  
+  let ah='';
+  fixtures.slice(0,20).forEach(f=>{
+    ah+='<div style="padding:4px;border-bottom:1px solid #222;font-size:12px">'+(f.played?'✅':'⏳')+' GW'+f.week+': '+f.home+' '+(f.played?f.hg+'-'+f.ag:'')+' '+f.away+'</div>';
+  });
+  document.getElementById('af').innerHTML=ah||'No fixtures';
+}
+
+function resetMe(){
+  localStorage.removeItem('eballer_myClub');
+  location.reload();
+}
+
+check();
+</script>
+</body>
+</html>
