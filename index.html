@@ -1,10 +1,50 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Eballer - 50 KES</title><style>body{margin:0;background:#0f172a;color:#fff;font-family:system-ui}.h{padding:12px;background:#37003c;font-weight:900;display:flex;justify-content:space-between}.b{background:#1e293b;margin:10px;border-radius:12px;padding:12px}.i{width:100%;padding:12px;border:0;border-radius:8px;margin:6px 0;box-sizing:border-box;font-weight:700}.btn{width:100%;padding:12px;border:0;border-radius:8px;background:#00ff87;color:#000;font-weight:900;font-size:14px}.pay{background:#00ff87;color:#000;padding:12px;border-radius:10px;font-weight:900;margin:8px 0}</style></head><body>
-<div class=h><span>EBALLER KISUMU - 50 KES</span><span id=c style="background:#00ff87;color:#000;padding:3px 8px;border-radius:8px;font-size:11px">0/32</span></div>
-<div class=b><div style="color:#00ff87;font-weight:900">💰 Pay to Join League - 32 Slots Only - 50 KES</div><div class=pay><div style="display:flex;justify-content:space-between">Paybill <b>714777</b></div><div style="display:flex;justify-content:space-between">Account <b>0141939000</b></div><div style="font-size:14px;margin-top:6px">Amount: <b>50 KES</b> ONLY</div></div><input id=n class=i placeholder="Your Pool Name e.g. Prince Nyaru"><input id=p class=i placeholder="Phone 07..."><input id=mp class=i placeholder="M-PESA CODE e.g. TJ123ABC"><button class=btn onclick="S()">SUBMIT CODE & REGISTER - 50 KES</button><div id=msg style="margin-top:8px;font-size:12px;color:#facc15"></div></div>
-<script>
-var L=[],D=[];try{L=JSON.parse(localStorage.getItem("eballer_league32")||"[]")}catch(e){}try{D=JSON.parse(localStorage.getItem("eb_deposits")||"[]")}catch(e){}
-function U(){document.getElementById("c").innerText=L.length+"/32"}
-function S(){var name=document.getElementById("n").value.trim();var phone=document.getElementById("p").value.trim();var code=document.getElementById("mp").value.trim().toUpperCase();if(!name||!phone||!code){alert("Fill all");return}if(L.length>=32){alert("32 full");return}D.push({name:name,phone:phone,code:code,status:"PENDING",fee:"50",time:Date.now()});localStorage.setItem("eb_deposits",JSON.stringify(D));document.getElementById("msg").innerHTML="✅ "+code+" for "+name+" - 50 KES received! Wait approval";document.getElementById("n").value="";document.getElementById("p").value="";document.getElementById("mp").value="";U();alert("Registered 50 KES!")}
-U();
-</script>
-</body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Baller Online - Season 1</title>
+<style>
+body{background:#0a0a0f;color:white;font-family:Arial;padding:10px;margin:0}
+.card{background:#1a1a2e;border:2px solid #00ff88;border-radius:15px;padding:15px;margin:10px 0}
+.btn{background:#00ff88;color:black;padding:12px 20px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:5px}
+.btn-wa{background:#25D366;color:white}
+.btn-purple{background:#a855f7;color:white}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{padding:8px;border-bottom:1px solid #333;text-align:left;font-size:12px}
+th{background:#00ff88;color:black}
+</style>
+</head>
+<body>
+
+<div class="card" style="text-align:center;border-color:#a855f7">
+<h1 style="color:#00ff88;margin:0">E-FOOTBALL CHAMPIONSHIP ONLINE</h1>
+<h3>Season 1 • Winner Takes 1000 KES</h3>
+<p>32 PLAYERS ONLY • ENTRY 50 KES • LOCATION ONLINE</p>
+<p><b>M-PESA PAYBILL 714777 • ACCOUNT 0141939000</b><br>
+WHATSAPP 0753998388 • SEND MPESA CODE</p>
+<a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" target="_blank" class="btn btn-wa">💬 JOIN WHATSAPP GROUP NOW</a>
+<p id="slotCount" style="color:#00ff88;font-weight:bold">0/32 Players Paid</p>
+</div>
+
+<div class="card">
+<h3>🎮 Register Club (After Paying)</h3>
+<input id="playerName" placeholder="Your Name" style="width:90%;padding:10px;margin:5px;border-radius:5px">
+<select id="clubName" style="width:95%;padding:10px;margin:5px;border-radius:5px">
+<option>Arsenal</option><option>Man City</option><option>Man United</option><option>Liverpool</option>
+<option>Chelsea</option><option>Barcelona</option><option>Real Madrid</option><option>Bayern</option>
+<option>PSG</option><option>Inter</option><option>AC Milan</option><option>Juventus</option>
+<option>Atletico Madrid</option><option>Dortmund</option><option>Ajax</option><option>Tottenham</option>
+<option>Newcastle</option><option>Leverkusen</option><option>Napoli</option><option>Porto</option>
+</select>
+<input id="mpesaCode" placeholder="MPesa Code e.g. QGH7..." style="width:90%;padding:10px;margin:5px;border-radius:5px">
+<button class="btn" onclick="registerPlayer()">REGISTER</button>
+</div>
+
+<div class="card">
+<h3>⚙️ Admin Panel - E-Baller</h3>
+<button class="btn btn-purple" onclick="autoGenerateFixtures()">🤖 AUTO PICK FIXTURES (32 players)</button>
+<button class="btn btn-wa" onclick="shareUpdate()">📤 AUTO SHARE Fixtures + Table to WhatsApp Group</button>
+<button class="btn" onclick="showTable()">📊 View Table</button>
+<button class="btn" onclick="showFixtures()">📅 View Fixtures</button>
+</
