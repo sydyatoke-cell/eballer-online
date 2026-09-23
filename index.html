@@ -1,29 +1,55 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>E-Baller Online - Players</title>
-<style>body{background:#0a0a0f;color:white;font-family:Arial;padding:10px}.card{background:#1a1a2e;border:2px solid #00ff88;border-radius:15px;padding:15px;margin:10px 0}.btn{background:#00ff88;color:black;padding:12px 20px;border:none;border-radius:8px;font-weight:bold}.btn-wa{background:#25D366;color:white}table{width:100%;border-collapse:collapse}th,td{padding:8px;border-bottom:1px solid #333;font-size:12px}th{background:#00ff88;color:black}</style>
+<title>E-Baller Online - Season 1</title>
+<style>
+body{background:#0a0a0f;color:white;font-family:Arial;padding:10px;margin:0}
+.card{background:#1a1a2e;border:2px solid #00ff88;border-radius:15px;padding:15px;margin:10px 0}
+.btn{background:#00ff88;color:black;padding:12px 20px;border:none;border-radius:10px;font-weight:bold;cursor:pointer;width:95%;margin:5px 0}
+.btn-wa{background:#25D366;color:white}
+.lock{background:#332200;border:2px solid #ffcc00}
+.pendingPulse{animation:pulse 2s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:0.5}100%{opacity:1}}
+table{width:100%;border-collapse:collapse}th,td{padding:8px;border-bottom:1px solid #333;font-size:12px}th{background:#00ff88;color:black}
+</style>
 </head><body>
+
 <div class="card" style="text-align:center;border-color:#a855f7">
-<h1 style="color:#00ff88">E-FOOTBALL CHAMPIONSHIP ONLINE</h1>
+<h1 style="color:#00ff88;margin:0">E-FOOTBALL CHAMPIONSHIP ONLINE</h1>
 <h3>Season 1 • Winner Takes 1000 KES</h3>
-<p>32 PLAYERS ONLY • ENTRY 50 KES • ONLINE</p>
+<p>32 SLOTS ONLY • ENTRY 50 KES</p>
 <p><b>PAYBILL 714777 • ACC 0141939000</b><br>WHATSAPP 0753998388</p>
-<a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" class="btn btn-wa">💬 JOIN WHATSAPP GROUP</a>
-<p id="count" style="color:#00ff88"></p>
+<a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" target="_blank" class="btn btn-wa" style="display:block;text-align:center;text-decoration:none">💬 TAP TO JOIN GROUP DIRECT</a>
+<p id="slotCount" style="color:#00ff88;font-weight:bold"></p>
 </div>
-<div class="card"><h3>Register Club</h3>
-<input id="playerName" placeholder="Your Name" style="width:90%;padding:10px;margin:5px"><br>
-<select id="clubName" style="width:95%;padding:10px;margin:5px"><option>Arsenal</option><option>Man City</option><option>Man United</option><option>Liverpool</option><option>Chelsea</option><option>Barcelona</option><option>Real Madrid</option><option>Bayern</option><option>PSG</option><option>Inter</option><option>Juventus</option><option>Dortmund</option><option>Ajax</option><option>Tottenham</option></select><br>
-<input id="mpesaCode" placeholder="MPesa Code" style="width:90%;padding:10px;margin:5px"><br>
-<button class="btn" onclick="register()">REGISTER</button></div>
-<div class="card"><h3>Table</h3><table><thead><tr><th>#</th><th>Club</th><th>MP</th><th>Pts</th></tr></thead><tbody id="tb"></tbody></table></div>
-<div class="card"><h3>Fixtures</h3><div id="fx"></div></div>
-<script>
-let players=JSON.parse(localStorage.getItem('eballer_players')||'[]');
-let table=JSON.parse(localStorage.getItem('eballer_table')||'[]');
-let fixtures=JSON.parse(localStorage.getItem('eballer_fixtures')||'[]');
-document.getElementById('count').innerText=players.length+'/32 Paid';
-function register(){let n=document.getElementById('playerName').value,c=document.getElementById('clubName').value,m=document.getElementById('mpesaCode').value;if(!n||!m)return alert('Enter Name & Mpesa');players.push({name:n,club:c,code:m});localStorage.setItem('eballer_players',JSON.stringify(players));alert('Registered! Join WhatsApp Group');location.reload();}
-table.sort((a,b)=>b.Pts-a.Pts);let h='';table.forEach((t,i)=>{h+=`<tr><td>${i+1}</td><td>${t.Club}</td><td>${t.MP}</td><td>${t.Pts}</td></tr>`});document.getElementById('tb').innerHTML=h;
-let f='';fixtures.slice(0,15).forEach(x=>{f+=`<div>${x.played?'✅':'⏳'} GW${x.week}: ${x.home} vs ${x.away} ${x.played?x.hg+'-'+x.ag:''}</div>`});document.getElementById('fx').innerHTML=f;
-</script></body></html>
+
+<!-- STATE 1: NOT REGISTERED -->
+<div class="card" id="registerCard">
+<h3>🎮 Step 1: Pay Then Register</h3>
+<p style="font-size:13px">1. Lipa 50 via Paybill 714777<br>2. Enter Mpesa Code below<br>3. Wait for Admin to Unlock your Desk</p>
+<input id="playerName" placeholder="Your Name (e.g. Syd)" style="width:92%;padding:12px;margin:5px;border-radius:8px">
+<select id="clubName" style="width:97%;padding:12px;margin:5px;border-radius:8px">
+<option>Arsenal</option><option>Man City</option><option>Man United</option><option>Liverpool</option><option>Chelsea</option><option>Barcelona</option><option>Real Madrid</option><option>Bayern</option><option>PSG</option><option>Inter</option><option>AC Milan</option><option>Juventus</option><option>Atletico Madrid</option><option>Dortmund</option><option>Ajax</option><option>Tottenham</option><option>Newcastle</option><option>Leverkusen</option><option>Napoli</option><option>Porto</option>
+</select>
+<input id="mpesaCode" placeholder="Mpesa Code e.g. QGH7..." style="width:92%;padding:12px;margin:5px;border-radius:8px">
+<button class="btn" onclick="register()">PAY & REGISTER - WAIT FOR APPROVAL</button>
+</div>
+
+<!-- STATE 2: PENDING -->
+<div class="card lock pendingPulse" id="pendingCard" style="display:none;text-align:center">
+<h2>⏳ WAITING FOR APPROVAL</h2>
+<p id="pendingText"></p>
+<p style="color:#ffcc00">Admin is verifying your payment Paybill 714777.<br>Your Desk is locked - will be Unlocked soon!</p>
+<p>Stay in WhatsApp group:</p>
+<a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" class="btn btn-wa" style="display:block;text-align:center;text-decoration:none">GO TO GROUP</a>
+<button class="btn" style="background:#333;color:white" onclick="localStorage.clear();location.reload()">Change Club / Code</button>
+</div>
+
+<!-- STATE 3: APPROVED - CAN SEE EVERYTHING -->
+<div id="approvedSection" style="display:none">
+<div class="card" style="border-color:#00ff88;text-align:center">
+<h2 style="color:#00ff88">✅ DESK UNLOCKED! WELCOME <span id="myClub"></span></h2>
+<p>You are APPROVED for Season 1! See fixtures below.</p>
+</div>
+
+<div class="card"><h3>🏆 Standing Table - Live</h3>
+<table><thead><tr><th>#</th><th>Club</th><th>MP</th><th>W</th><th>Pts</th></tr></thead><tbody id="
