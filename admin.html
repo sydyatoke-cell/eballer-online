@@ -1,24 +1,35 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin - E-Baller</title>
-<style>body{background:#0a0a0f;color:white;font-family:Arial;padding:10px}.card{background:#1a1a2e;border:2px solid #a855f7;border-radius:15px;padding:15px;margin:10px 0}.btn{padding:12px 20px;border:none;border-radius:8px;font-weight:bold;margin:5px;cursor:pointer}.btn-p{background:#a855f7;color:white}.btn-g{background:#00ff88}.btn-wa{background:#25D366;color:white}.btn-r{background:#ff4444;color:white}</style></head><body>
-<script>let p=prompt('Enter Admin Password:');if(p!=='0753'){document.body.innerHTML='<h1>Access Denied</h1>';throw new Error('No access');}</script>
-<div class="card"><h2>⚙️ E-BALLER ADMIN - SECRET</h2>
-<p id="count"></p>
-<button class="btn btn-p" onclick="autoFixtures()">🤖 AUTO PICK FIXTURES (32)</button>
-<button class="btn btn-wa" onclick="shareAll()">📤 AUTO SHARE to WhatsApp Group</button>
-<button class="btn btn-r" onclick="clearAll()">🗑️ Clear All Data</button>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ADMIN - Approve & Unlock Desk</title>
+<style>body{background:#0a0a0f;color:#fff;font-family:Arial;padding:10px}.card{background:#1a1a2e;border:2px solid #a855f7;border-radius:12px;padding:12px;margin:10px 0}.btn{padding:10px;border:none;border-radius:8px;font-weight:bold;margin:4px;cursor:pointer}.g{background:#00ff88}.wa{background:#25D366;color:#fff}.r{background:#ff4444;color:#fff}.y{background:#ffcc00;color:#000}.pending{border-color:#ffcc00;background:#332200}</style></head><body>
+<script>if(prompt('Admin Password:')!=='0753'){document.body.innerHTML='Denied';throw Error}</script>
+
+<div class="card pending"><h3>⏳ PENDING - UNLOCK DESK TO APPROVE NEW MEMBERS</h3><div id="pendingList">Loading...</div></div>
+
+<div class="card"><h3>🏆 APPROVED TABLE (32)</h3><p id="count"></p>
+<button class="btn g" onclick="autoFix()">AUTO FIXTURES</button>
+<button class="btn wa" onclick="share()">📤 SHARE TO GROUP</button>
+<table style="width:100%"><thead><tr><th>#</th><th>Club</th><th>Pts</th><th>Desk</th><th>Action</th></tr></thead><tbody id="tableBody"></tbody></table>
 </div>
-<div class="card"><h3>Enter Result (Auto Updates Table)</h3>
-<select id="home"></select> <input id="hg" type="number" style="width:40px"> vs <input id="ag" type="number" style="width:40px"> <select id="away"></select>
-<button class="btn btn-g" onclick="submitRes()">Submit & Auto Share Result</button>
-<div id="list"></div></div>
+
+<div class="card"><h3>📅 MATCH CONTROL</h3><div><select id="h"></select><input id="hg" type="number" style="width:30px" placeholder="H"> vs <input id="ag" type="number" style="width:30px" placeholder="A"><select id="a"></select><button class="btn g" onclick="endM()">END</button></div><div id="fixList"></div></div>
+
 <script>
+let players=JSON.parse(localStorage.getItem('eballer_players')||'[]'),pending=JSON.parse(localStorage.getItem('eballer_pending')||'[]'),fixtures=JSON.parse(localStorage.getItem('eballer_fixtures')||'[]'),table=JSON.parse(localStorage.getItem('eballer_table')||'[]'),locked=JSON.parse(localStorage.getItem('eballer_locked')||'[]');
 const GROUP="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0";
-let players=JSON.parse(localStorage.getItem('eballer_players')||'[]');let fixtures=JSON.parse(localStorage.getItem('eballer_fixtures')||'[]');let table=JSON.parse(localStorage.getItem('eballer_table')||'[]');
-document.getElementById('count').innerText=players.length+'/32 Players: '+players.map(p=>p.club).join(', ');
-function autoFixtures(){if(players.length<2)return alert('Need players');let teams=[...players];fixtures=[];for(let r=0;r<teams.length-1;r++){for(let i=0;i<teams.length/2;i++){fixtures.push({week:r+1,home:teams[i].club,away:teams[teams.length-1-i].club,played:false}) }teams.splice(1,0,teams.pop());}table=players.map(p=>({Club:p.club,MP:0,W:0,Pts:0}));localStorage.setItem('eballer_fixtures',JSON.stringify(fixtures));localStorage.setItem('eballer_table',JSON.stringify(table));alert('Fixtures Generated!');location.reload();}
-let opts=players.map(p=>`<option>${p.club}</option>`).join('');document.getElementById('home').innerHTML=opts;document.getElementById('away').innerHTML=opts;
-let l='';fixtures.forEach(f=>{l+=`<div>${f.played?'✅':'⏳'} ${f.home} vs ${f.away} ${f.played?f.hg+'-'+f.ag:''}</div>`});document.getElementById('list').innerHTML=l;
-function submitRes(){let h=document.getElementById('home').value,a=document.getElementById('away').value,hg=parseInt(document.getElementById('hg').value),ag=parseInt(document.getElementById('ag').value);let f=fixtures.find(x=>x.home===h&&x.away===a&&!x.played);if(f){f.played=true;f.hg=hg;f.ag=ag;}table.forEach(t=>{if(t.Club===h||t.Club===a)t.MP++;if(hg>ag&&t.Club===h){t.W++;t.Pts+=3}if(ag>hg&&t.Club===a){t.W++;t.Pts+=3}if(hg===ag)t.Pts+=1});localStorage.setItem('eballer_fixtures',JSON.stringify(fixtures));localStorage.setItem('eballer_table',JSON.stringify(table));let msg=`*RESULT* 🔥\n${h} ${hg}-${ag} ${a}\n\n*Table Top 5:*\n`+table.sort((x,y)=>y.Pts-x.Pts).slice(0,5).map((t,i)=>`${i+1}. ${t.Club} - ${t.Pts}pts`).join('\n')+`\n\nGroup: ${GROUP}`;window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');}
-function shareAll(){let msg=`*E-BALLER WEEKLY UPDATE* 🏆\n\n*Fixtures:*\n`+fixtures.filter(f=>!f.played).slice(0,5).map(f=>`${f.home} vs ${f.away}`).join('\n')+`\n\n*Table:*\n`+table.sort((a,b)=>b.Pts-a.Pts).slice(0,10).map((t,i)=>`${i+1}. ${t.Club} - ${t.Pts}pts`).join('\n')+`\n\nhttps://sydyatoke-cell.github.io/eballer-online/\nGroup: ${GROUP}`;window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');}
-function clearAll(){if(confirm('Delete all?')){localStorage.clear();alert('Cleared');location.reload();}}
+function save(){localStorage.setItem('eballer_players',JSON.stringify(players));localStorage.setItem('eballer_pending',JSON.stringify(pending));localStorage.setItem('eballer_fixtures',JSON.stringify(fixtures));localStorage.setItem('eballer_table',JSON.stringify(table));localStorage.setItem('eballer_locked',JSON.stringify(locked));render();}
+function render(){
+ document.getElementById('count').innerText=players.length+'/32 Approved | '+pending.length+' Waiting';
+ let pH='';if(!pending.length)pH='No pending - all desks unlocked';else pending.forEach((p,i)=>{pH+=`<div style="background:#111;padding:8px;margin:5px;border-radius:8px;display:flex;justify-content:space-between"><span><b>${p.name}</b> - ${p.club}<br><small>${p.code}</small></span><span><button class="btn g" onclick="approve(${i})">UNLOCK & APPROVE</button><button class="btn r" onclick="reject(${i})">Reject</button></span></div>`});document.getElementById('pendingList').innerHTML=pH;
+ table.sort((a,b)=>b.Pts-a.Pts);let tH='';table.forEach((t,i)=>{let lk=locked.includes(t.Club);tH+=`<tr><td>${i+1}</td><td>${t.Club}</td><td>${t.Pts}</td><td>${lk?'🔒 LOCKED':'✅ UNLOCKED'}</td><td><button class="btn y" onclick="toggle('${t.Club}')">${lk?'Unlock Desk':'Lock Desk'}</button><button class="btn r" onclick="removeP('${t.Club}')">Remove</button></td></tr>`});document.getElementById('tableBody').innerHTML=tH;
+ let o=players.map(p=>`<option>${p.club}</option>`).join('');document.getElementById('h').innerHTML=o;document.getElementById('a').innerHTML=o;
+ let fH='';fixtures.forEach((f,i)=>{fH+=`<div style="padding:5px;border-bottom:1px solid #333;display:flex;justify-content:space-between"><span>${f.played?'✅':'⏳'} ${f.home} ${f.played?f.hg+'-'+f.ag:''} ${f.away} ${f.status||''}</span><span>${!f.played?`<button class="btn g" onclick="qEnd(${i})">End</button>`:`<button class="btn r" onclick="disq(${i})">Disqualify</button>`}<button class="btn y" onclick="unlockM(${i})">Unlock</button></span></div>`});document.getElementById('fixList').innerHTML=fH;
+}
+function approve(i){let p=pending[i];if(players.length>=32)return alert('Full');players.push(p);table.push({Club:p.club,MP:0,Pts:0});pending.splice(i,1);save();let msg=`*DESK UNLOCKED* ✅\n${p.name} - ${p.club} Approved!\nNow you can see fixtures & table.\nSite: https://sydyatoke-cell.github.io/eballer-online/\nGroup: ${GROUP}`;window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
+function reject(i){pending.splice(i,1);save();}function toggle(c){if(locked.includes(c))locked=locked.filter(x=>x!=c);else locked.push(c);save();}function removeP(c){if(!confirm('Remove '+c))return;players=players.filter(p=>p.club!=c);table=table.filter(t=>t.Club!=c);fixtures=fixtures.filter(f=>f.home!=c&&f.away!=c);save();}
+function autoFix(){if(players.length<2)return alert('Need players');let t=[...players];fixtures=[];for(let r=0;r<t.length-1;r++){for(let i=0;i<t.length/2;i++)fixtures.push({week:r+1,home:t[i].club,away:t[t.length-1-i].club,played:false,hg:0,ag:0,status:''});t.splice(1,0,t.pop());}table=players.map(p=>({Club:p.club,MP:0,Pts:0}));save();}
+function endM(){let h=document.getElementById('h').value,a=document.getElementById('a').value,hg=parseInt(document.getElementById('hg').value),ag=parseInt(document.getElementById('ag').value);let f=fixtures.find(x=>x.home==h&&x.away==a&&!x.played);if(!f)return alert('Not found');f.played=true;f.hg=hg;f.ag=ag;f.status='FINISHED';table.forEach(t=>{if(t.Club==h||t.Club==a)t.MP++;if(hg>ag&&t.Club==h)t.Pts+=3;if(ag>hg&&t.Club==a)t.Pts+=3;if(hg==ag)t.Pts+=1;});save();}
+function qEnd(i){let f=fixtures[i];let hg=prompt(f.home+' goals','1'),ag=prompt(f.away+' goals','0');f.played=true;f.hg=parseInt(hg);f.ag=parseInt(ag);f.status='ENDED';table.forEach(t=>{if(t.Club==f.home||t.Club==f.away)t.MP++;if(f.hg>f.ag&&t.Club==f.home)t.Pts+=3;if(f.ag>f.hg&&t.Club==f.away)t.Pts+=3;if(f.hg==f.ag)t.Pts+=1;});save();}
+function disq(i){let f=fixtures[i];table.forEach(t=>{if(t.Club==f.home||t.Club==f.away)t.MP=Math.max(0,t.MP-1);if(f.hg>f.ag&&t.Club==f.home)t.Pts=Math.max(0,t.Pts-3);if(f.ag>f.hg&&t.Club==f.away)t.Pts=Math.max(0,t.Pts-3);if(f.hg==f.ag)t.Pts=Math.max(0,t.Pts-1);});f.played=false;f.status='DISQUALIFIED';f.hg=0;f.ag=0;save();}
+function unlockM(i){fixtures[i].played=false;fixtures[i].status='UNLOCKED';save();}
+function share(){let msg=`*TABLE TOP 10*\n`+table.slice(0,10).map((t,i)=>`${i+1}. ${t.Club} - ${t.Pts}pts`).join('\n')+`\n\nGroup: ${GROUP}`;window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');}
+render();
 </script></body></html>
