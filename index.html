@@ -1,55 +1,37 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>E-Baller Online - Season 1</title>
-<style>
-body{background:#0a0a0f;color:white;font-family:Arial;padding:10px;margin:0}
-.card{background:#1a1a2e;border:2px solid #00ff88;border-radius:15px;padding:15px;margin:10px 0}
-.btn{background:#00ff88;color:black;padding:12px 20px;border:none;border-radius:10px;font-weight:bold;cursor:pointer;width:95%;margin:5px 0}
-.btn-wa{background:#25D366;color:white}
-.lock{background:#332200;border:2px solid #ffcc00}
-.pendingPulse{animation:pulse 2s infinite}
-@keyframes pulse{0%{opacity:1}50%{opacity:0.5}100%{opacity:1}}
-table{width:100%;border-collapse:collapse}th,td{padding:8px;border-bottom:1px solid #333;font-size:12px}th{background:#00ff88;color:black}
-</style>
-</head><body>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E-Baller S1</title>
+<style>body{background:#0a0a0f;color:#fff;font-family:Arial;padding:10px}.card{background:#1a1a2e;border:2px solid #00ff88;border-radius:12px;padding:12px;margin:8px 0}.btn{background:#00ff88;color:#000;padding:14px;border:none;border-radius:10px;font-weight:bold;width:100%}.wa{background:#25D366;color:#fff}</style></head><body>
 
-<div class="card" style="text-align:center;border-color:#a855f7">
-<h1 style="color:#00ff88;margin:0">E-FOOTBALL CHAMPIONSHIP ONLINE</h1>
-<h3>Season 1 • Winner Takes 1000 KES</h3>
-<p>32 SLOTS ONLY • ENTRY 50 KES</p>
-<p><b>PAYBILL 714777 • ACC 0141939000</b><br>WHATSAPP 0753998388</p>
-<a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" target="_blank" class="btn btn-wa" style="display:block;text-align:center;text-decoration:none">💬 TAP TO JOIN GROUP DIRECT</a>
-<p id="slotCount" style="color:#00ff88;font-weight:bold"></p>
+<div class="card" style="text-align:center">
+<h2 style="color:#00ff88;margin:0">E-FOOTBALL S1</h2>
+<p>Winner 1000 KES • Entry 50 KES</p>
+<p>PAYBILL 714777 ACC 0141939000</p>
+<a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" class="btn wa" style="display:block;text-decoration:none;text-align:center">💬 JOIN GROUP DIRECT</a>
+<p id="c" style="color:#00ff88"></p>
 </div>
 
-<!-- STATE 1: NOT REGISTERED -->
-<div class="card" id="registerCard">
-<h3>🎮 Step 1: Pay Then Register</h3>
-<p style="font-size:13px">1. Lipa 50 via Paybill 714777<br>2. Enter Mpesa Code below<br>3. Wait for Admin to Unlock your Desk</p>
-<input id="playerName" placeholder="Your Name (e.g. Syd)" style="width:92%;padding:12px;margin:5px;border-radius:8px">
-<select id="clubName" style="width:97%;padding:12px;margin:5px;border-radius:8px">
-<option>Arsenal</option><option>Man City</option><option>Man United</option><option>Liverpool</option><option>Chelsea</option><option>Barcelona</option><option>Real Madrid</option><option>Bayern</option><option>PSG</option><option>Inter</option><option>AC Milan</option><option>Juventus</option><option>Atletico Madrid</option><option>Dortmund</option><option>Ajax</option><option>Tottenham</option><option>Newcastle</option><option>Leverkusen</option><option>Napoli</option><option>Porto</option>
-</select>
-<input id="mpesaCode" placeholder="Mpesa Code e.g. QGH7..." style="width:92%;padding:12px;margin:5px;border-radius:8px">
-<button class="btn" onclick="register()">PAY & REGISTER - WAIT FOR APPROVAL</button>
+<div class="card" id="reg"><h3>Pay & Register</h3>
+<input id="n" placeholder="Your Name" style="width:92%;padding:10px;margin:4px;border-radius:8px">
+<select id="cl" style="width:97%;padding:10px;margin:4px;border-radius:8px"><option>Arsenal</option><option>Man City</option><option>Man Utd</option><option>Liverpool</option><option>Chelsea</option><option>Barcelona</option><option>Real Madrid</option><option>Bayern</option><option>PSG</option><option>Inter</option></select>
+<input id="code" placeholder="Mpesa Code" style="width:92%;padding:10px;margin:4px;border-radius:8px">
+<button class="btn" onclick="reg()">REGISTER - WAIT APPROVAL</button>
 </div>
 
-<!-- STATE 2: PENDING -->
-<div class="card lock pendingPulse" id="pendingCard" style="display:none;text-align:center">
-<h2>⏳ WAITING FOR APPROVAL</h2>
-<p id="pendingText"></p>
-<p style="color:#ffcc00">Admin is verifying your payment Paybill 714777.<br>Your Desk is locked - will be Unlocked soon!</p>
-<p>Stay in WhatsApp group:</p>
-<a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" class="btn btn-wa" style="display:block;text-align:center;text-decoration:none">GO TO GROUP</a>
-<button class="btn" style="background:#333;color:white" onclick="localStorage.clear();location.reload()">Change Club / Code</button>
+<div class="card" id="pend" style="display:none;text-align:center;border-color:#ffcc00"><h3>⏳ WAITING - DESK LOCKED</h3><p id="pt"></p><a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" class="btn wa" style="display:block;text-decoration:none;text-align:center">GO TO GROUP</a><button onclick="localStorage.clear();location.reload()" style="background:#333;color:#fff;padding:8px;border:none;border-radius:8px;margin-top:8px;width:100%">Reset</button></div>
+
+<div id="ok" style="display:none">
+<div class="card" style="border-color:#00ff88"><h3>✅ UNLOCKED - <span id="mc"></span></h3></div>
+<div class="card"><h3>🏆 Table</h3><div id="tb"></div></div>
+<div class="card"><h3>📅 Your Fixtures</h3><div id="mf"></div><h3>All Fixtures</h3><div id="af"></div></div>
 </div>
 
-<!-- STATE 3: APPROVED - CAN SEE EVERYTHING -->
-<div id="approvedSection" style="display:none">
-<div class="card" style="border-color:#00ff88;text-align:center">
-<h2 style="color:#00ff88">✅ DESK UNLOCKED! WELCOME <span id="myClub"></span></h2>
-<p>You are APPROVED for Season 1! See fixtures below.</p>
-</div>
-
-<div class="card"><h3>🏆 Standing Table - Live</h3>
-<table><thead><tr><th>#</th><th>Club</th><th>MP</th><th>W</th><th>Pts</th></tr></thead><tbody id="
+<script>
+let P=JSON.parse(localStorage.getItem('eballer_players')||'[]'),Q=JSON.parse(localStorage.getItem('eballer_pending')||'[]'),F=JSON.parse(localStorage.getItem('eballer_fixtures')||'[]'),T=JSON.parse(localStorage.getItem('eballer_table')||'[]'),M=JSON.parse(localStorage.getItem('eballer_myClub')||'null');
+function upd(){document.getElementById('c').innerText=P.length+'/32 Approved';}
+upd();
+function reg(){let n=document.getElementById('n').value,c=document.getElementById('cl').value,cd=document.getElementById('code').value;if(!n||!cd)return alert('Enter details');if(P.find(x=>x.club==c))return alert('Taken');Q.push({name:n,club:c,code:cd});M={name:n,club:c,code:cd};localStorage.setItem('eballer_pending',JSON.stringify(Q));localStorage.setItem('eballer_myClub',JSON.stringify(M));chk();}
+function chk(){M=JSON.parse(localStorage.getItem('eballer_myClub')||'null');if(!M){regCard();return}if(P.find(p=>p.club==M.club)){show();}else if(Q.find(q=>q.club==M.club)){pendCard();}else{localStorage.removeItem('eballer_myClub');regCard();}}
+function regCard(){document.getElementById('reg').style.display='block';document.getElementById('pend').style.display='none';document.getElementById('ok').style.display='none';}
+function pendCard(){document.getElementById('reg').style.display='none';document.getElementById('pend').style.display='block';document.getElementById('ok').style.display='none';document.getElementById('pt').innerText=M.name+' - '+M.club+' | '+M.code+'\nDesk 🔒 Locked - Admin will Unlock soon';}
+function show(){document.getElementById('reg').style.display='none';document.getElementById('pend').style.display='none';document.getElementById('ok').style.display='block';document.getElementById('mc').innerText=M.club;let h='';T.sort((a,b)=>b.Pts-a.Pts);T.forEach((t,i)=>{h+=`<div style="padding:6px;border-bottom:1px solid #333;${t.Club==M.club?'background:#00ff8822;color:#00ff88':''}">${i+1}. ${t.Club} - ${t.Pts}pts (${t.MP}MP)</div>`});document.getElementById('tb').innerHTML=h;let mf=F.filter(f=>f.home==M.club||f.away==M.club),mh='';if(!mf.length)mh='No fixtures yet';else mf.forEach(f=>{mh+=`<div style="padding:5px;border-bottom:1px solid #222">${f.played?'✅':'⏳'} ${f.home} ${f.played?f.hg+'-'+f.ag:''} ${f.away}</div>`});document.getElementById('mf').innerHTML=mh;let ah='';F.slice(0,20).forEach(f=>{ah+=`<div style="padding:4px;border-bottom:1px solid #222;font-size:12px">${f.played?'✅':'⏳'} GW${f.week}: ${f.home} ${f.played?f.hg+'-'+f.ag:''} ${f.away}</div>`});document.getElementById('af').innerHTML=ah||'No fixtures';}
+chk();
+</script></body></html>
