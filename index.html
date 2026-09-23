@@ -1,50 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>E-Baller Online - Season 1</title>
-<style>
-body{background:#0a0a0f;color:white;font-family:Arial;padding:10px;margin:0}
-.card{background:#1a1a2e;border:2px solid #00ff88;border-radius:15px;padding:15px;margin:10px 0}
-.btn{background:#00ff88;color:black;padding:12px 20px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:5px}
-.btn-wa{background:#25D366;color:white}
-.btn-purple{background:#a855f7;color:white}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{padding:8px;border-bottom:1px solid #333;text-align:left;font-size:12px}
-th{background:#00ff88;color:black}
-</style>
-</head>
-<body>
-
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>E-Baller Online - Players</title>
+<style>body{background:#0a0a0f;color:white;font-family:Arial;padding:10px}.card{background:#1a1a2e;border:2px solid #00ff88;border-radius:15px;padding:15px;margin:10px 0}.btn{background:#00ff88;color:black;padding:12px 20px;border:none;border-radius:8px;font-weight:bold}.btn-wa{background:#25D366;color:white}table{width:100%;border-collapse:collapse}th,td{padding:8px;border-bottom:1px solid #333;font-size:12px}th{background:#00ff88;color:black}</style>
+</head><body>
 <div class="card" style="text-align:center;border-color:#a855f7">
-<h1 style="color:#00ff88;margin:0">E-FOOTBALL CHAMPIONSHIP ONLINE</h1>
+<h1 style="color:#00ff88">E-FOOTBALL CHAMPIONSHIP ONLINE</h1>
 <h3>Season 1 • Winner Takes 1000 KES</h3>
-<p>32 PLAYERS ONLY • ENTRY 50 KES • LOCATION ONLINE</p>
-<p><b>M-PESA PAYBILL 714777 • ACCOUNT 0141939000</b><br>
-WHATSAPP 0753998388 • SEND MPESA CODE</p>
-<a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" target="_blank" class="btn btn-wa">💬 JOIN WHATSAPP GROUP NOW</a>
-<p id="slotCount" style="color:#00ff88;font-weight:bold">0/32 Players Paid</p>
+<p>32 PLAYERS ONLY • ENTRY 50 KES • ONLINE</p>
+<p><b>PAYBILL 714777 • ACC 0141939000</b><br>WHATSAPP 0753998388</p>
+<a href="https://chat.whatsapp.com/EuhWoFsaY7Y8f6XJYjFeM0" class="btn btn-wa">💬 JOIN WHATSAPP GROUP</a>
+<p id="count" style="color:#00ff88"></p>
 </div>
-
-<div class="card">
-<h3>🎮 Register Club (After Paying)</h3>
-<input id="playerName" placeholder="Your Name" style="width:90%;padding:10px;margin:5px;border-radius:5px">
-<select id="clubName" style="width:95%;padding:10px;margin:5px;border-radius:5px">
-<option>Arsenal</option><option>Man City</option><option>Man United</option><option>Liverpool</option>
-<option>Chelsea</option><option>Barcelona</option><option>Real Madrid</option><option>Bayern</option>
-<option>PSG</option><option>Inter</option><option>AC Milan</option><option>Juventus</option>
-<option>Atletico Madrid</option><option>Dortmund</option><option>Ajax</option><option>Tottenham</option>
-<option>Newcastle</option><option>Leverkusen</option><option>Napoli</option><option>Porto</option>
-</select>
-<input id="mpesaCode" placeholder="MPesa Code e.g. QGH7..." style="width:90%;padding:10px;margin:5px;border-radius:5px">
-<button class="btn" onclick="registerPlayer()">REGISTER</button>
-</div>
-
-<div class="card">
-<h3>⚙️ Admin Panel - E-Baller</h3>
-<button class="btn btn-purple" onclick="autoGenerateFixtures()">🤖 AUTO PICK FIXTURES (32 players)</button>
-<button class="btn btn-wa" onclick="shareUpdate()">📤 AUTO SHARE Fixtures + Table to WhatsApp Group</button>
-<button class="btn" onclick="showTable()">📊 View Table</button>
-<button class="btn" onclick="showFixtures()">📅 View Fixtures</button>
-</
+<div class="card"><h3>Register Club</h3>
+<input id="playerName" placeholder="Your Name" style="width:90%;padding:10px;margin:5px"><br>
+<select id="clubName" style="width:95%;padding:10px;margin:5px"><option>Arsenal</option><option>Man City</option><option>Man United</option><option>Liverpool</option><option>Chelsea</option><option>Barcelona</option><option>Real Madrid</option><option>Bayern</option><option>PSG</option><option>Inter</option><option>Juventus</option><option>Dortmund</option><option>Ajax</option><option>Tottenham</option></select><br>
+<input id="mpesaCode" placeholder="MPesa Code" style="width:90%;padding:10px;margin:5px"><br>
+<button class="btn" onclick="register()">REGISTER</button></div>
+<div class="card"><h3>Table</h3><table><thead><tr><th>#</th><th>Club</th><th>MP</th><th>Pts</th></tr></thead><tbody id="tb"></tbody></table></div>
+<div class="card"><h3>Fixtures</h3><div id="fx"></div></div>
+<script>
+let players=JSON.parse(localStorage.getItem('eballer_players')||'[]');
+let table=JSON.parse(localStorage.getItem('eballer_table')||'[]');
+let fixtures=JSON.parse(localStorage.getItem('eballer_fixtures')||'[]');
+document.getElementById('count').innerText=players.length+'/32 Paid';
+function register(){let n=document.getElementById('playerName').value,c=document.getElementById('clubName').value,m=document.getElementById('mpesaCode').value;if(!n||!m)return alert('Enter Name & Mpesa');players.push({name:n,club:c,code:m});localStorage.setItem('eballer_players',JSON.stringify(players));alert('Registered! Join WhatsApp Group');location.reload();}
+table.sort((a,b)=>b.Pts-a.Pts);let h='';table.forEach((t,i)=>{h+=`<tr><td>${i+1}</td><td>${t.Club}</td><td>${t.MP}</td><td>${t.Pts}</td></tr>`});document.getElementById('tb').innerHTML=h;
+let f='';fixtures.slice(0,15).forEach(x=>{f+=`<div>${x.played?'✅':'⏳'} GW${x.week}: ${x.home} vs ${x.away} ${x.played?x.hg+'-'+x.ag:''}</div>`});document.getElementById('fx').innerHTML=f;
+</script></body></html>
